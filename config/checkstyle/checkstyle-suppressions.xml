@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC "-//Puppy Crawl//DTD Suppressions 1.1//EN" "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+    <!-- relax rules in unit tests -->
+    <suppress checks="FileLength_Error|AvoidStaticImport|ClassFanOutComplexity|ClassDataAbstractionCoupling|IllegalInstantiation|IllegalThrows|MagicNumber|MethodCount|ParameterNumber" files=".*Test.java"/>
+    <suppress checks="FileLength_Error|AvoidStaticImport|ClassFanOutComplexity|ClassDataAbstractionCoupling|IllegalInstantiation|IllegalThrows|MagicNumber|MethodCount|ParameterNumber" files=".*Spec.groovy"/>
+    <!-- We are ok with these -->
+    <suppress checks="IllegalInstantiation" files="com.buyexpressly.api.util.EncodingUtils.java"/>
+    <suppress checks="MagicNumber" files="com.buyexpressly.api.resource.*"/>
+    <suppress checks="MethodLength" files="com.buyexpressly.api.MerchantServiceRouter"/>
+</suppressions>
