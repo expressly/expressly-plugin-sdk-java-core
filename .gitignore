@@ -74,7 +74,3 @@ local.properties
 
 #JENV
 .java-version
-
-#localdev classes
-MyApplicationListener.java
-ExpresslyProviderIntegrationSpec.groovy
