@@ -1,11 +1,19 @@
+import org.gradle.api.artifacts.maven.MavenDeployment
+
 apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 apply plugin: 'groovy'
 apply plugin: 'checkstyle'
 apply plugin: 'war'
 
-
 group = 'com.buyexpressly'
 version = '2.0'
+
+signing {
+    required { gradle.taskGraph.hasTask('uploadArchives') }
+    sign configurations.archives
+}
 
 repositories {
     mavenCentral()
@@ -31,3 +39,66 @@ checkstyle {
     showViolations = false
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from tasks.javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+boolean release = true
+String snapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+String stagingUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: (release ? stagingUrl : snapshotUrl)) {
+                authentication(userName: {sonatypeUsername}, password: {sonatypePassword})
+            }
+
+            pom.project {
+                name 'expressly-plugin-sdk-java-core'
+                packaging 'jar'
+                description 'Simple Service Discovery Protocol (SSDP) Java Library'
+                url 'https://github.com/expressly/expressly-plugin-sdk-java-core'
+
+                scm {
+                    url 'scm:git@github.com:expressly/expressly-plugin-sdk-java-core.git'
+                    connection 'scm@github.com:expressly/expressly-plugin-sdk-java-core.git'
+                    developerConnection 'scm:git@github.com:expressly/expressly-plugin-sdk-java-core.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The MIT License (MIT)'
+                        url 'https://github.com/expressly/expressly-plugin-sdk-java-core/master/LICENSE'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'mgsmith57'
+                        name 'Marc G. Smith'
+                    }
+                    developer {
+                        id 'gcorre02'
+                        name 'Guilherme Ribeiro'
+                    }
+                }
+            }
+        }
+    }
+}
