@@ -2,10 +2,20 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'checkstyle'
 apply plugin: 'war'
-
+apply from: "$rootDir/coverage.gradle"
 
 group = 'com.buyexpressly'
 version = '2.0'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -30,4 +40,3 @@ checkstyle {
     configFile = new File(rootDir, "config/checkstyle/checkstyle.xml")
     showViolations = false
 }
-
