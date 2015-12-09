@@ -48,7 +48,7 @@ class ExpresslyProviderImplSpec extends Specification {
 
         then: "I can see the provider failed to be instantiated"
         ExpresslyException exception = thrown()
-        "field [expresslyApiKey] value is invalid, should match pattern [^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$]" == exception.message
+        "field [FieldToDecode] value is invalid, should match pattern [^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$]" == exception.message
     }
 
     def "the provider can request a ping to xly"() {
@@ -60,14 +60,11 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.PING.endpoint
                 client
         }
-        1 * client.call(_ as HashMap<String, String>) >> {
-            Map<String, String> responseType ->
-                assert responseType instanceof Map
-                assert responseType.size() == 0
-                [
-                        "Server"   : "Live",
-                        "DB Status": "Live"
-                ]
+        1 * client.call(_ as Class<SuccessMessageResponse>) >> {
+            Class<SuccessMessageResponse> responseType ->
+                SuccessMessageResponse returnable = new SuccessMessageResponse()
+                returnable.success = true
+                returnable
         }
 
         when: "I request a ping"
@@ -86,18 +83,15 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.PING.endpoint
                 client
         }
-        1 * client.call(_ as HashMap<String, String>) >> {
-            Map<String, String> responseType ->
-                assert responseType instanceof Map
-                assert responseType.size() == 0
+        1 * client.call(_ as Class<SuccessMessageResponse>) >> {
+            Class<SuccessMessageResponse> responseType ->
                 throw new ExpresslyException("Client wasn't reacheable")
         }
 
         when: "I try to request a ping from xly"
-        boolean ping = expresslyProvider.ping();
+        expresslyProvider.ping();
 
         then: "I get a an exception"
-        !ping
         thrown(ExpresslyException)
     }
 
@@ -135,10 +129,8 @@ class ExpresslyProviderImplSpec extends Specification {
                 request.apiKey == XLY_KEY
                 request.pluginVersion == "v2"
         }
-        1 * client.call(_ as String) >> {
-            String responseType ->
-                assert responseType instanceof String
-                assert responseType.size() == 0
+        1 * client.call(_ as Class<String>) >> {
+            Class<String> responseType ->
                 "204"
         }
 
@@ -170,16 +162,15 @@ class ExpresslyProviderImplSpec extends Specification {
                 request.apiKey == XLY_KEY
                 request.pluginVersion == "v2"
         }
-        1 * client.call(_ as String) >> {
-            String responseType ->
+        1 * client.call(_ as Class<String>) >> {
+            Class<String> responseType ->
                 throw new ExpresslyException("")
         }
 
         when:
-        boolean status = expresslyProvider.install(requestApiBaseUrl);
+        expresslyProvider.install(requestApiBaseUrl);
 
         then:
-        !status
         thrown(ExpresslyException)
     }
 
@@ -196,9 +187,8 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.UNINSTALL.getEndpoint().replaceAll(Pattern.quote("{uuid}"), TEST_UUID)
                 client
         }
-        1 * client.call(_ as SuccessMessageResponse) >> {
-            SuccessMessageResponse responseType ->
-                assert responseType instanceof SuccessMessageResponse
+        1 * client.call(_ as Class<SuccessMessageResponse>) >> {
+            Class<SuccessMessageResponse> responseType ->
                 SuccessMessageResponse returnable = new SuccessMessageResponse()
                 returnable.success = true
                 returnable
@@ -224,17 +214,16 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.UNINSTALL.getEndpoint().replaceAll(Pattern.quote("{uuid}"), TEST_UUID)
                 client
         }
-        1 * client.call(_ as SuccessMessageResponse) >> {
-            SuccessMessageResponse responseType ->
+        1 * client.call(_ as Class<SuccessMessageResponse>) >> {
+            Class<SuccessMessageResponse> responseType ->
                 throw new ExpresslyException("")
 
         }
 
         when: "I make a request to uninstall the plugin to the provider"
-        boolean uninstall = expresslyProvider.uninstall()
+        expresslyProvider.uninstall()
 
-        then: "I can see the request was successful"
-        !uninstall
+        then: "I can see that an exception was thrown"
         thrown(ExpresslyException)
     }
 
@@ -254,12 +243,7 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.POPUP_HTML.getEndpoint().replaceAll(Pattern.quote("{uuid}"), expectedCustomerUuid)
                 client
         }
-        1 * client.call(_ as String) >> {
-            String responseType ->
-                assert responseType instanceof String
-                responseType.size() == 0
-                "success"
-        }
+        1 * client.call(_ as Class<String>) >> "success"
 
         when: "I make a request to the provider for the migration popup"
         String popup = expresslyProvider.fetchMigrationConfirmationHtml(expectedCustomerUuid)
@@ -284,10 +268,8 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.POPUP_HTML.getEndpoint().replaceAll(Pattern.quote("{uuid}"), expectedCustomerUuid)
                 client
         }
-        1 * client.call(_ as String) >> {
-            String responseType ->
-                assert responseType instanceof String
-                responseType.size() == 0
+        1 * client.call(_ as Class<String>) >> {
+            Class<String> responseType ->
                 throw new ExpresslyException("")
         }
 
@@ -328,17 +310,12 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.CUSTOMER.getEndpoint().replaceAll(Pattern.quote("{uuid}"), expectedCampaignCustomerUuid)
                 client
         }
-        1 * client.call(_ as MigrationResponse) >> {
-            MigrationResponse responseType ->
-                assert responseType instanceof MigrationResponse
-                expectedResponse
-        }
+        1 * client.call(_ as Class<MigrationResponse>) >> expectedResponse
 
         when: "I make a request to the provider for the migration popup"
         def response = expresslyProvider.fetchMigrationCustomerData(expectedCampaignCustomerUuid)
 
-        then: "I can see the request was executed properly"
-        response instanceof MigrationResponse
+        then: "I can see the correct response was returned"
         response == expectedResponse
     }
 
@@ -358,16 +335,15 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.CUSTOMER.getEndpoint().replaceAll(Pattern.quote("{uuid}"), expectedCampaignCustomerUuid)
                 client
         }
-        1 * client.call(_ as MigrationResponse) >> {
-            MigrationResponse responseType ->
+        1 * client.call(_ as Class<MigrationResponse>) >> {
+            Class<MigrationResponse> responseType ->
                 throw new ExpresslyException("")
         }
 
         when: "I make a request to the provider for the migration popup"
-        def response = expresslyProvider.fetchMigrationCustomerData(expectedCampaignCustomerUuid)
+        expresslyProvider.fetchMigrationCustomerData(expectedCampaignCustomerUuid)
 
-        then: "I can see the request was successful"
-        response == null
+        then: "I see that an exception was thrown"
         thrown(ExpresslyException)
     }
 
@@ -398,9 +374,8 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.CONFIRM_MIGRATION.getEndpoint().replaceAll(Pattern.quote("{uuid}"), expectedCampaignCustomerUuid)
                 client
         }
-        1 * client.call(_ as SuccessMessageResponse) >> {
-            SuccessMessageResponse responseType ->
-                assert responseType instanceof SuccessMessageResponse
+        1 * client.call(_ as Class<SuccessMessageResponse>) >> {
+            Class<SuccessMessageResponse> responseType ->
                 SuccessMessageResponse successMessageResponse = new SuccessMessageResponse()
                 successMessageResponse.success = true
                 successMessageResponse
@@ -410,7 +385,7 @@ class ExpresslyProviderImplSpec extends Specification {
         when: "I make a request to the provider for the migration popup"
         boolean response = expresslyProvider.finaliseMigrationOfCustomerData(expectedCampaignCustomerUuid)
 
-        then: "I can see the request was properly formatted"
+        then: "I can see the correct response was returned"
         response
     }
 
@@ -442,17 +417,15 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.CONFIRM_MIGRATION.getEndpoint().replaceAll(Pattern.quote("{uuid}"), expectedCampaignCustomerUuid)
                 client
         }
-        1 * client.call(_ as SuccessMessageResponse) >> {
-            SuccessMessageResponse responseType ->
-                assert responseType instanceof SuccessMessageResponse
+        1 * client.call(_ as Class<SuccessMessageResponse>) >> {
+            Class<SuccessMessageResponse> responseType ->
                 throw new ExpresslyException("")
         }
 
         when: "I make a request to the provider for the migration popup"
-        boolean response = expresslyProvider.finaliseMigrationOfCustomerData(expectedCampaignCustomerUuid)
+        expresslyProvider.finaliseMigrationOfCustomerData(expectedCampaignCustomerUuid)
 
-        then: "I can see the request was properly formatted"
-        !response
+        then: "I can see an exception was thrown"
         thrown(ExpresslyException)
     }
 
@@ -478,17 +451,12 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert name == "email"
                 assert value == requestEmail
         }
-        1 * client.call(_ as BannerDetailResponse) >> {
-            BannerDetailResponse responseType ->
-                assert responseType instanceof BannerDetailResponse
-                expectedResponse
-        }
+        1 * client.call(_ as Class<BannerDetailResponse>) >> expectedResponse
 
         when: "I request the xly provider for a banner"
         def response = expresslyProvider.getCampaignBanner(requestEmail)
 
-        then: "I can see the request was properly constructed"
-        response instanceof BannerDetailResponse
+        then: "I can see the correct response is returned"
         response == expectedResponse
     }
 
@@ -508,7 +476,6 @@ class ExpresslyProviderImplSpec extends Specification {
         String requestEmail = "a@test.com"
 
         and: "I have a client set up with the correct information"
-        BannerDetailResponse expectedResponse = new BannerDetailResponse()
         client = Spy(ExpresslyHttpClient.class, constructorArgs: [
                 GET,
                 ExpresslyApiEndpoint.GET_BANNER.getEndpoint().replaceAll(Pattern.quote("{merchantUuid}"), TEST_UUID),
@@ -525,8 +492,8 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert name == "email"
                 assert value == requestEmail
         }
-        1 * client.call(_ as BannerDetailResponse) >> {
-            BannerDetailResponse responseType ->
+        1 * client.call(_ as Class<BannerDetailResponse>) >> {
+            Class<BannerDetailResponse> responseType ->
                 throw new ExpresslyException()
         }
 

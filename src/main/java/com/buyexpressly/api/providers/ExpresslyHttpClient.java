@@ -5,7 +5,6 @@ import com.buyexpressly.api.resource.server.XlyQuery;
 import com.buyexpressly.api.util.Builders;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -55,13 +54,13 @@ class ExpresslyHttpClient {
         this.httpClient = client;
     }
 
-    public <R> R call(final R responseType) throws ClientProtocolException, IOException {
+    public <R> R call(final Class<R> responseType) throws IOException {
         HttpUriRequest httpRequest = requestBuilder.build();
         ResponseHandler<R> responseHandler = buildResponseHandler(responseType);
         return httpClient.execute(httpRequest, responseHandler);
     }
 
-    private <R> ResponseHandler<R> buildResponseHandler(final R responseType) {
+    private <R> ResponseHandler<R> buildResponseHandler(final Class<R> responseType) {
         return new ResponseHandler<R>() {
             @Override
             public R handleResponse(final HttpResponse response) throws IOException, ExpresslyException {
@@ -78,7 +77,7 @@ class ExpresslyHttpClient {
                         return (R) EntityUtils.toString(entity);
                     case "application/json":
                         ObjectMapper om = new ObjectMapper();
-                        return (R) om.readValue(EntityUtils.toString(entity), responseType.getClass());
+                        return (R) om.readValue(EntityUtils.toString(entity), responseType);
                     default:
                         return (R) status;
                 }

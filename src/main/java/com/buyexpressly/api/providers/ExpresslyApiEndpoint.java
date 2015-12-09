@@ -1,7 +1,7 @@
 package com.buyexpressly.api.providers;
 
 public enum ExpresslyApiEndpoint {
-    PING("admin/ping"),
+    PING("v1/merchant/ping"),
     REGISTER("v2/plugin/merchant"),
     UNINSTALL("v2/plugin/merchant/{uuid}"),
     POPUP_HTML("v2/migration/{uuid}"),

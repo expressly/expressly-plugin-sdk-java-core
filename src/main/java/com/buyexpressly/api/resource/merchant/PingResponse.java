@@ -13,6 +13,10 @@ public final class PingResponse {
 
     }
 
+    public String getExpressly() {
+        return expressly;
+    }
+
     public static PingResponse build() {
         return SUCCESS;
     }

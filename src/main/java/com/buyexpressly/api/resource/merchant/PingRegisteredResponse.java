@@ -13,6 +13,10 @@ public final class PingRegisteredResponse {
 
     }
 
+    public boolean isRegistered() {
+        return registered;
+    }
+
     public static PingRegisteredResponse build() {
         return SUCCESS;
     }

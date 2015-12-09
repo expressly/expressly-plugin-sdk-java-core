@@ -50,10 +50,10 @@ public class MerchantServiceRouter {
 
         switch (route) {
             case PING:
-                ping(request, response);
+                ping(response);
                 break;
             case PING_REGISTERED:
-                pingRegistered(request, response);
+                pingRegistered(response);
                 break;
             case DISPLAY_POPUP:
                 displayPopup(request, response);
@@ -92,11 +92,11 @@ public class MerchantServiceRouter {
         mapper.writeValue(response.getWriter(), merchantServiceHandler.checkEmailAddresses(emailAddressRequest));
     }
 
-    private void ping(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void ping(HttpServletResponse response) throws IOException {
         mapper.writeValue(response.getWriter(), PingResponse.build());
     }
 
-    private void pingRegistered(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void pingRegistered(HttpServletResponse response) throws IOException {
         mapper.writeValue(response.getWriter(), PingRegisteredResponse.build());
     }
 

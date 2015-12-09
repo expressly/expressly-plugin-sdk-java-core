@@ -250,7 +250,7 @@ class BuildersSpec extends Specification {
 
         then: "I can see no exception is thrown"
         ExpresslyException exception = thrown()
-        exception.getMessage() == "field [expresslyApiKey] value is invalid, should match pattern [^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$]"
+        exception.getMessage() == "field [FieldToDecode] value is invalid, should match pattern [^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$]"
     }
 
     def "The apiKey validation fails if it is not made up of two components" () {

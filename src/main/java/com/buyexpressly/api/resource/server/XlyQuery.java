@@ -14,7 +14,6 @@ public class XlyQuery extends StringEntity {
     }
 
     public static  <T> XlyQuery toJsonEntity(T request) throws IOException {
-        ObjectMapper om = new ObjectMapper();
         String json = new ObjectMapper().writer().writeValueAsString(request);
         return new XlyQuery(json);
     }

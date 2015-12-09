@@ -20,7 +20,7 @@ public final class EncodingUtils {
         return DatatypeConverter.printBase64Binary(token.getBytes());
     }
 
-    static void validateEncoding(String token, String fieldName) {
+    private static void validateEncoding(String token, String fieldName) {
         Builders.pattern(token, fieldName, BASE64_PATTERN);
     }
 }
