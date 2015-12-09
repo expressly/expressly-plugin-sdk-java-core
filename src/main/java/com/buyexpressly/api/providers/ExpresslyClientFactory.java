@@ -17,7 +17,7 @@ class ExpresslyClientFactory {
         this.expresslyApiKey = expresslyApiKey;
     }
 
-    ExpresslyHttpClient makeClient(String methodName, String endpoint) {
+    public ExpresslyHttpClient makeClient(String methodName, String endpoint) {
         Builders.validate(ALLOWED_METHODS.contains(methodName), "Illegal request method");
         return new ExpresslyHttpClient(methodName, endpoint, expresslyApiKey, expresslyEndpoint);
     }
