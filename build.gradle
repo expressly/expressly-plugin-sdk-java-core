@@ -1,12 +1,23 @@
-//import org.gradle.api.artifacts.maven.MavenDeployment
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'groovy'
 apply plugin: 'checkstyle'
+apply plugin: 'war'
+apply from: "$rootDir/coverage.gradle"
 
 group = 'com.buyexpressly'
 version = '2.0'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
+    }
+}
 
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }
