@@ -1,6 +1,7 @@
 [![Expressly](https://buyexpressly.com/assets/img/expressly-logo-sm-gray.png)](https://buyexpressly.com)
 # Expressly Plug-in Java SDK
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.buyexpressly/plugin-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.buyexpressly/plugin-sdk)
 [![Build Status](https://api.travis-ci.org/expressly/expressly-plugin-sdk-java-core.png)](https://travis-ci.org/expressly/expressly-plugin-sdk-java-core)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/1b014cca6abd4f57b9387d19d391cafa)](https://www.codacy.com/app/marc-g-smith/expressly-plugin-sdk-java-core)
 
