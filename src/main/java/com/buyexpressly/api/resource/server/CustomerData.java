@@ -55,6 +55,10 @@ public final class CustomerData {
         this.shippingAddress = builder.shippingAddress;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public String getFirstName() {
         return firstName;
     }
