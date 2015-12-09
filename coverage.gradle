@@ -1,13 +1,15 @@
+import static groovy.json.JsonOutput.*
+
 apply plugin: 'jacoco'
 
 ext {
     limits = [
-            'instruction': 75,
+            'instruction': 70,
             'branch'     : 65,
-            'line'       : 75,
+            'line'       : 70,
             'complexity' : 60,
-            'method'     : 65,
-            'class'      : 75 //TODO - 100%
+            'method'     : 60,
+            'class'      : 100
     ]
 }
 
@@ -52,6 +54,9 @@ jacocoTestReport {
             }
         }
 
+        codacyTestReport(results)
+
+
         if (failures) {
             logger.quiet("------------------ Code Coverage Failed -----------------------")
             failures.each {
@@ -63,6 +68,40 @@ jacocoTestReport {
             logger.quiet("Passed Code Coverage Checks")
         }
     }
+}
+
+def codacyPercentage(Node node) {
+    def covered = node.'@covered' as Double
+    def missed = node.'@missed' as Double
+    (((covered / (covered + missed)) * 100).round(2)) as Integer
+}
+
+def codacyTestReport(Node report) {
+    def codacy = [
+            language: 'Java',
+            total: codacyPercentage(report.counter.find { it.'@type'.equals('LINE') }),
+            fileReports: codacyFileReports(report.package)]
+
+    file("${jacoco.reportsDir}/test/codacy-coverage-report.json").write(prettyPrint(toJson(codacy)))
+    logger.quiet("------------------ Generated Codacy Coverage Report -------------------")
+}
+
+def codacyFileReports(List<Node> packages) {
+    packages.collectMany { packageNode ->
+        String packageName = packageNode.'@name'
+        packageNode.sourcefile.collect { sourceNode ->
+            [
+                    filename: packageName + '/' + sourceNode.'@name',
+                    total: codacyPercentage(sourceNode.counter.find { it.'@type'.equals('LINE') }),
+                    coverage: codacyLineReports(sourceNode.line)]
+        }
+    }
+}
+
+def codacyLineReports(List<Node> lines) {
+    lines
+            .findAll { (it.'@ci' as Integer) > 0 }
+            .collectEntries { [(it.'@nr'): 1] }
 }
 
 check.dependsOn jacocoTestReport
