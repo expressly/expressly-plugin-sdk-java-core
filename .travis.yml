@@ -1,10 +1,6 @@
 language: java
 
 after_success:
-    - env
-    - echo "####################"
-    - echo $TEST_ENV
-    - echo $TEST_ENV2
     - curl http://www.jpm4j.org/install/script > jpmInstall.sh
     - sudo sh jpmInstall.sh
     - sudo jpm install com.codacy:codacy-coverage-reporter:assembly
