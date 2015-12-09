@@ -1,11 +1,9 @@
-import org.gradle.api.artifacts.maven.MavenDeployment
-
+//import org.gradle.api.artifacts.maven.MavenDeployment
 apply plugin: 'java'
-apply plugin: 'maven-publish'
+apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'groovy'
 apply plugin: 'checkstyle'
-apply plugin: 'war'
 
 group = 'com.buyexpressly'
 version = '2.0'
@@ -30,7 +28,7 @@ dependencies {
     testCompile 'org.apache.commons:commons-lang3:3.0'
     testCompile "cglib:cglib:2.2"
 
-    providedCompile 'javax.servlet:servlet-api:2.5'
+    compile 'javax.servlet:servlet-api:2.5'
     checkstyle('com.puppycrawl.tools:checkstyle:6.7')
 }
 
@@ -65,13 +63,13 @@ uploadArchives {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: (release ? stagingUrl : snapshotUrl)) {
-                authentication(userName: {sonatypeUsername}, password: {sonatypePassword})
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
 
             pom.project {
-                name 'expressly-plugin-sdk-java-core'
+                name 'plugin-sdk'
                 packaging 'jar'
-                description 'Simple Service Discovery Protocol (SSDP) Java Library'
+                description "Expressly Java SDK to integrate e-commerce platforms with the Expressly Network API"
                 url 'https://github.com/expressly/expressly-plugin-sdk-java-core'
 
                 scm {
