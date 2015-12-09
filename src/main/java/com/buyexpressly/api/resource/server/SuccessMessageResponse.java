@@ -8,9 +8,6 @@ public class SuccessMessageResponse {
     private boolean success;
     private String msg;
 
-    public SuccessMessageResponse() {
-    }
-
     public boolean isSuccess() {
         return success;
     }
