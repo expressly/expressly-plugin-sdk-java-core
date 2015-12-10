@@ -37,6 +37,10 @@ public final class CustomerData {
     private CustomerData() {
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private CustomerData(Builder builder) {
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
