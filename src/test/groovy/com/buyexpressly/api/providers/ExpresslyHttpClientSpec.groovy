@@ -189,7 +189,7 @@ class ExpresslyHttpClientSpec extends Specification {
 
         then:
         ExpresslyException exception = thrown()
-        exception.getMessage() == "Error occurred in request to XLY. StatusCode=400, Detail=test exception ResponseContent=null"
+        exception.getMessage() == "Error occurred in request to Expressly Server. StatusCode=400, Detail=test exception ResponseContent=null"
 
     }
 

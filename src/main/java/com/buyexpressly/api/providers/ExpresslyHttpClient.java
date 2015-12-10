@@ -66,7 +66,7 @@ class ExpresslyHttpClient {
             @Override
             public R handleResponse(final HttpResponse response) throws IOException, ExpresslyException {
                 if (response.getStatusLine().getStatusCode() >= MIN_ERROR_STATUS_CODE) {
-                    throw new ExpresslyException(String.format("Error occurred in request to XLY. StatusCode=%s, Detail=%s ResponseContent=%s",
+                    throw new ExpresslyException(String.format("Error occurred in request to Expressly Server. StatusCode=%s, Detail=%s ResponseContent=%s",
                             response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase(), EntityUtils.toString(response.getEntity())));
                 }
                 return handleEntity(response.getEntity(), String.valueOf(response.getStatusLine().getStatusCode()));
