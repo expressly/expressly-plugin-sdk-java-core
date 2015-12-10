@@ -11,7 +11,28 @@ integrate their e-commerce platform with the [Expressly network](https://buyexpr
 
 ## Getting Started
 
-TBD.
+Gradle / Grails
+     
+     compile 'com.buyexpressly:plugin-sdk:2.+'
+     
+Ivy
+     
+     <dependency org="com.buyexpressly" name="plugin-sdk" rev="2.+" />
+     
+Maven
+
+    <dependency>
+        <groupId>com.buyexpressly</groupId>
+        <artifactId>plugin-sdk</artifactId>
+        <version>[2.0,3.0)</version>
+    </dependency>
+    
+Scala SBT
+
+    libraryDependencies += "com.buyexpressly" % "plugin-sdk" % "2.+"
+
+You can find a Java / Tomcat reference implementation [here](https://github.com/expressly/expressly-plugin-java-reference-implementation)
+to help you get started.
 
 Further resources including popular e-commerce platform modules can be found on the 
 [Expressly developer portal](http://developer.buyexpressly.com).
