@@ -30,7 +30,7 @@ dependencies {
     testCompile 'org.apache.commons:commons-lang3:3.0'
     testCompile "cglib:cglib:2.2"
 
-    compile 'javax.servlet:servlet-api:2.5'
+    providedCompile 'javax.servlet:servlet-api:2.5'
     checkstyle('com.puppycrawl.tools:checkstyle:6.7')
 }
 
