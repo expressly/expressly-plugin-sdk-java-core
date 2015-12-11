@@ -25,7 +25,7 @@ class ExpresslyFactorySpec extends Specification {
         then:
         factory == null
         ExpresslyException exception = thrown()
-        "field [expresslyApiKey] value is invalid, should match pattern [^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$]" == exception.message
+        exception.message == "field [FieldToDecode] value is invalid, should match pattern [^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$]"
     }
 
     def "I can request an instance of the expressly provider with a custom expressly endpoint"() {

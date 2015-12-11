@@ -32,10 +32,9 @@ class EncodingUtilsSpec extends Specification {
         assert EncodingUtils.BASE64_PATTERN == "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$"
 
         when: "I use the EncodingUtils class"
-        String result = EncodingUtils.fromBase64(TO_BE_DECODED.substring(0, TO_BE_DECODED.length() - 2))
+        println EncodingUtils.fromBase64("%%this:has:invalid:tokens")
 
         then:"I can see the decoder threw an error"
-        result == null
         ExpresslyException exception = thrown()
         exception.getMessage() == "field [FieldToDecode] value is invalid, should match pattern [^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})\$]"
     }

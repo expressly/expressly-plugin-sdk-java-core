@@ -55,7 +55,6 @@ public final class Builders {
 
     public static void validateApiKey(String apiKey) {
         validate(!apiKey.isEmpty(), "invalid expressly api key");
-        EncodingUtils.validateEncoding(apiKey, "expresslyApiKey");
         validate(EncodingUtils.fromBase64(apiKey).split(":").length == 2, "invalid expressly api key composition");
         pattern(EncodingUtils.fromBase64(apiKey).split(":")[0], "apiKey:[merchantUuid]", "[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}");
         validate(EncodingUtils.fromBase64(apiKey).split(":")[1].length() == SECRET_KEY_LENGTH, "apiKey:[secretPassword] is not valid");

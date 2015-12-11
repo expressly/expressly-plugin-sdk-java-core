@@ -153,7 +153,7 @@ class ExpresslyHttpClientSpec extends Specification {
         def expectedUriRquest = Mock(HttpUriRequest)
 
         when: "I make a call"
-        def response = client.call("")
+        client.call(String)
 
         then: "I can see the call is handled correctly"
         1 * client.requestBuilder.build() >> expectedUriRquest
@@ -174,7 +174,7 @@ class ExpresslyHttpClientSpec extends Specification {
         CloseableHttpClient mockClient = Mock(CloseableHttpClient)
         client.withHttpClient(mockClient)
         client.requestBuilder = Mock(RequestBuilder)
-        ResponseHandler handler = client.buildResponseHandler("")
+        ResponseHandler handler = client.buildResponseHandler(String)
         HttpResponse response = Mock(HttpResponse)
         def statusLine = Mock(StatusLine.class)
         _ * response.getStatusLine() >> statusLine
@@ -203,7 +203,7 @@ class ExpresslyHttpClientSpec extends Specification {
         CloseableHttpClient mockClient = Mock(CloseableHttpClient)
         client.withHttpClient(mockClient)
         client.requestBuilder = Mock(RequestBuilder)
-        ResponseHandler handler = client.buildResponseHandler("")
+        ResponseHandler handler = client.buildResponseHandler(String)
         HttpResponse response = Mock(HttpResponse)
         def statusLine = Mock(StatusLine.class)
         _ * response.getStatusLine() >> statusLine
@@ -227,7 +227,7 @@ class ExpresslyHttpClientSpec extends Specification {
         CloseableHttpClient mockClient = Mock(CloseableHttpClient)
         client.withHttpClient(mockClient)
         client.requestBuilder = Mock(RequestBuilder)
-        ResponseHandler handler = client.buildResponseHandler("")
+        ResponseHandler handler = client.buildResponseHandler(String)
         HttpResponse response = Mock(HttpResponse)
         def statusLine = Mock(StatusLine.class)
         _ * response.getStatusLine() >> statusLine
@@ -253,7 +253,7 @@ class ExpresslyHttpClientSpec extends Specification {
         CloseableHttpClient mockClient = Mock(CloseableHttpClient)
         client.withHttpClient(mockClient)
         client.requestBuilder = Mock(RequestBuilder)
-        ResponseHandler handler = client.buildResponseHandler(new SuccessMessageResponse())
+        ResponseHandler handler = client.buildResponseHandler(SuccessMessageResponse)
         HttpResponse response = Mock(HttpResponse)
         def statusLine = Mock(StatusLine.class)
         _ * response.getStatusLine() >> statusLine

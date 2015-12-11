@@ -14,8 +14,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public final class ExpresslyProviderImpl implements ExpresslyProvider {
@@ -36,8 +34,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
     @Override
     public boolean ping() throws IOException, ExpresslyException {
         ExpresslyHttpClient client = expresslyClientFactory.makeClient(HttpGet.METHOD_NAME, ExpresslyApiEndpoint.PING.getEndpoint());
-        Map<String, String> response = client.call(new HashMap<String, String>());
-        return "Live".equals(response.get("Server")) && "Live".equals(response.get("DB Status"));
+        return client.call(SuccessMessageResponse.class).isSuccess();
     }
 
     @Override
@@ -46,7 +43,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
         RegisterPluginRequest query = new RegisterPluginRequest(expresslyApiKey, apiBaseUrl, "v2");
         ExpresslyHttpClient client = expresslyClientFactory.makeClient(HttpPost.METHOD_NAME, ExpresslyApiEndpoint.REGISTER.getEndpoint());
         client.withRequestBody(XlyQuery.toJsonEntity(query));
-        String response = client.call("");
+        String response = client.call(String.class);
         return "204".equals(response);
     }
 
@@ -55,7 +52,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
         ExpresslyHttpClient client = expresslyClientFactory.makeClient(
                 HttpDelete.METHOD_NAME,
                 buildEndpoint("{uuid}", EncodingUtils.fromBase64(expresslyApiKey).split(":")[0], ExpresslyApiEndpoint.UNINSTALL));
-        return client.call(new SuccessMessageResponse()).isSuccess();
+        return client.call(SuccessMessageResponse.class).isSuccess();
 
     }
 
@@ -65,7 +62,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
         ExpresslyHttpClient client = expresslyClientFactory.makeClient(
                 HttpGet.METHOD_NAME,
                 buildEndpoint("{uuid}", campaignCustomerUuid, ExpresslyApiEndpoint.POPUP_HTML));
-        return client.call("");
+        return client.call(String.class);
     }
 
     @Override
@@ -74,7 +71,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
         ExpresslyHttpClient client = expresslyClientFactory.makeClient(
                 HttpGet.METHOD_NAME,
                 buildEndpoint("{uuid}", campaignCustomerUuid, ExpresslyApiEndpoint.CUSTOMER));
-        return client.call(new MigrationResponse());
+        return client.call(MigrationResponse.class);
     }
 
     @Override
@@ -83,7 +80,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
         ExpresslyHttpClient client = expresslyClientFactory.makeClient(
                 HttpPost.METHOD_NAME,
                 buildEndpoint("{uuid}", campaignCustomerUuid, ExpresslyApiEndpoint.CONFIRM_MIGRATION));
-        return client.call(new SuccessMessageResponse()).isSuccess();
+        return client.call(SuccessMessageResponse.class).isSuccess();
     }
 
     @Override
@@ -93,7 +90,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
                 HttpGet.METHOD_NAME,
                 buildEndpoint("{merchantUuid}", EncodingUtils.fromBase64(expresslyApiKey).split(":")[0], ExpresslyApiEndpoint.GET_BANNER));
         client.withQueryVariable("email", email);
-        return client.call(new BannerDetailResponse());
+        return client.call(BannerDetailResponse.class);
     }
 
     private String buildEndpoint(String pathElement, String replacement, ExpresslyApiEndpoint endpointType) {

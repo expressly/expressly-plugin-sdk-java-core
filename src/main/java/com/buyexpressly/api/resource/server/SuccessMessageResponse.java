@@ -4,11 +4,12 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 
 @JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class SuccessMessageResponse {
+public final class SuccessMessageResponse {
     private boolean success;
     private String msg;
 
-    public SuccessMessageResponse() {
+    private SuccessMessageResponse() {
+
     }
 
     public boolean isSuccess() {

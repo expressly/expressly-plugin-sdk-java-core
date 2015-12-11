@@ -8,7 +8,7 @@ public final class BannerDetailResponse {
     private String bannerImageUrl;
     private String migrationLink;
 
-    public BannerDetailResponse() {
+    private BannerDetailResponse() {
     }
 
     public String getBannerImageUrl() {

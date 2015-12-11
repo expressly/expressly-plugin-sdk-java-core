@@ -8,15 +8,6 @@ apply from: "$rootDir/coverage.gradle"
 group = 'com.buyexpressly'
 version = '2.0'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
-    }
-}
 
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }
@@ -38,7 +29,7 @@ dependencies {
     testCompile 'org.apache.commons:commons-lang3:3.0'
     testCompile "cglib:cglib:2.2"
 
-    compile 'javax.servlet:servlet-api:2.5'
+    providedCompile 'javax.servlet:servlet-api:2.5'
     checkstyle('com.puppycrawl.tools:checkstyle:6.7')
 }
 
