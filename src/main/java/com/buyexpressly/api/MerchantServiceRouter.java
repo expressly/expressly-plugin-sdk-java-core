@@ -47,10 +47,10 @@ public class MerchantServiceRouter {
 
         switch (route) {
             case PING:
-                ping(request, response);
+                ping(response);
                 break;
             case PING_REGISTERED:
-                pingRegistered(request, response);
+                pingRegistered(response);
                 break;
             case DISPLAY_POPUP:
                 displayPopup(request, response);
