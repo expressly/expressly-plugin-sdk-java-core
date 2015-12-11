@@ -1,6 +1,5 @@
 package com.buyexpressly.api;
 
-import com.buyexpressly.api.resource.error.ExpresslyException;
 import com.buyexpressly.api.resource.merchant.CustomerDataResponse;
 import com.buyexpressly.api.resource.merchant.EmailAddressRequest;
 import com.buyexpressly.api.resource.merchant.EmailStatusListResponse;
@@ -17,12 +16,10 @@ import com.buyexpressly.api.resource.server.Tuple;
 import com.buyexpressly.api.util.Builders;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class MerchantServiceRouter {
@@ -92,11 +89,11 @@ public class MerchantServiceRouter {
         mapper.writeValue(response.getWriter(), merchantServiceHandler.checkEmailAddresses(emailAddressRequest));
     }
 
-    private void ping(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void ping(HttpServletResponse response) throws IOException {
         mapper.writeValue(response.getWriter(), PingResponse.build());
     }
 
-    private void pingRegistered(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void pingRegistered(HttpServletResponse response) throws IOException {
         mapper.writeValue(response.getWriter(), PingRegisteredResponse.build());
     }
 
@@ -106,14 +103,7 @@ public class MerchantServiceRouter {
     }
 
     private void displayPopup(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            request.getSession().setAttribute(
-                    "popupContent",
-                    merchantServiceHandler.getDisplayPopupAction(MerchantServiceRoute.DISPLAY_POPUP.getUriParameters(request.getRequestURI()).get("campaignCustomerUuid")));
-            request.getRequestDispatcher(merchantServiceHandler.getPopUpDestination()).forward(request, response);
-        } catch (ServletException | ExpresslyException e) {
-            merchantServiceHandler.redirectToHomePage(response);
-        }
+        merchantServiceHandler.getPopup(request, response);
     }
 
     //INTERNAL routes!!!\\
@@ -123,7 +113,7 @@ public class MerchantServiceRouter {
         String merchantUserReference = merchantServiceHandler.registerCustomer(data.getMigrationData().getData());
         merchantServiceHandler.populateCart(merchantUserReference, data.getCartData());
         merchantServiceHandler.confirmCustomer(campaignCustomerUuid);
-        response.sendRedirect(merchantServiceHandler.getMigrationRedirectLocation(merchantUserReference));
+        response.sendRedirect(merchantServiceHandler.getMigrationRedirectLocation());
     }
 
     private class InternalMerchantServiceHandler {
@@ -133,10 +123,6 @@ public class MerchantServiceRouter {
         public InternalMerchantServiceHandler(MerchantServiceProvider merchantServiceProvider, ExpresslyProvider expresslyProvider) {
             this.merchantServiceProvider = merchantServiceProvider;
             this.expresslyProvider = expresslyProvider;
-        }
-
-        public String getDisplayPopupAction(String campaignCustomerUuid) throws IOException {
-            return expresslyProvider.fetchMigrationConfirmationHtml(campaignCustomerUuid);
         }
 
         public CustomerDataResponse getCustomerData(String email) {
@@ -151,10 +137,7 @@ public class MerchantServiceRouter {
         }
 
         public EmailStatusListResponse checkEmailAddresses(EmailAddressRequest request) {
-            List<String> existing = merchantServiceProvider.getExistingEmails(request.getEmails());
-            List<String> deleted = merchantServiceProvider.getDeletedEmails(request.getEmails());
-            List<String> pending = merchantServiceProvider.getPendingEmails(request.getEmails());
-            return EmailStatusListResponse.builder().addExisting(existing).addDeleted(deleted).addPending(pending).build();
+            return merchantServiceProvider.checkCustomerStatus(request);
         }
 
 
@@ -178,24 +161,19 @@ public class MerchantServiceRouter {
         }
 
         public void populateCart(String email, CartData cartData) {
-            Builders.validate(merchantServiceProvider.storeCartData(email, cartData), "Failed to add cart to customer id: %s");
+            Builders.validate(merchantServiceProvider.createCustomerCart(email, cartData), "Failed to add cart to customer id: %s");
         }
 
         public void confirmCustomer(String campaignCustomerUuid) throws IOException {
             Builders.validate(expresslyProvider.finaliseMigrationOfCustomerData(campaignCustomerUuid), String.format("Couldn't confirm the migration of %s with xly server", campaignCustomerUuid));
         }
 
-        public String getMigrationRedirectLocation(String merchantUserReference) {
-            return merchantServiceProvider.loginCustomer(merchantUserReference);
+        public String getMigrationRedirectLocation() {
+            return merchantServiceProvider.getPopupRedirectLocation();
         }
 
-
-        public String getPopUpDestination() {
-            return merchantServiceProvider.getPopupDestination();
-        }
-
-        public void redirectToHomePage(HttpServletResponse response) throws IOException {
-            response.sendRedirect(merchantServiceProvider.getHomePageLocation());
+        public void getPopup(HttpServletRequest request, HttpServletResponse response) {
+            merchantServiceProvider.popupHandler(request, response);
         }
     }
 }
