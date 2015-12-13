@@ -8,9 +8,9 @@ import org.codehaus.jackson.annotate.JsonMethod;
 public class Customer {
     private CustomerData customerData;
     private String email;
-    private Integer userReference;
+    private String userReference;
 
-    public Customer(CustomerData customerData, String email, Integer userReference) {
+    public Customer(CustomerData customerData, String email, String userReference) {
         this.customerData = Builders.requiresNonNull(customerData, "Customer Cannot be null");
         this.email = Builders.requiresNonNull(email, "Invalid Email");
         this.userReference = userReference;
@@ -27,7 +27,7 @@ public class Customer {
         return email;
     }
 
-    public Integer getUserReference() {
+    public String getUserReference() {
         return userReference;
     }
 

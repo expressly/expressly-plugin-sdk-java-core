@@ -106,14 +106,19 @@ public class MerchantServiceRouter {
         merchantServiceHandler.getPopup(request, response);
     }
 
-    //INTERNAL routes!!!\\
     private void confirmMigration(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String campaignCustomerUuid = MerchantServiceRoute.CONFIRM_MIGRATION.getUriParameters(request.getRequestURI()).get("campaignCustomerUuid");
         MigrationResponse data = merchantServiceHandler.acceptMigration(campaignCustomerUuid);
-        String merchantUserReference = merchantServiceHandler.registerCustomer(data.getMigrationData().getData());
-        merchantServiceHandler.populateCart(merchantUserReference, data.getCartData());
-        merchantServiceHandler.confirmCustomer(campaignCustomerUuid);
-        response.sendRedirect(merchantServiceHandler.getMigrationRedirectLocation());
+        if (merchantServiceHandler.checkCustomerAlreadyExists(data)) {
+            merchantServiceHandler.handleCustomerAlreadyExists(data, request, response);
+
+        } else {
+            String merchantUserReference = merchantServiceHandler.registerCustomer(data);
+            merchantServiceHandler.populateCart(merchantUserReference, data.getCartData());
+            merchantServiceHandler.confirmCustomer(campaignCustomerUuid);
+            merchantServiceHandler.loginCustomer(merchantUserReference, request, response);
+            response.sendRedirect(merchantServiceHandler.getMigratedRedirectLocation());
+        }
     }
 
     private class InternalMerchantServiceHandler {
@@ -140,9 +145,6 @@ public class MerchantServiceRouter {
             return merchantServiceProvider.checkCustomerStatus(request);
         }
 
-
-        // INTERNAL \\
-
         public MigrationResponse acceptMigration(String campaignCustomerUuid) throws IOException {
             MigrationResponse response = expresslyProvider.fetchMigrationCustomerData(campaignCustomerUuid);
             String email = response.getMigrationData().getData().getEmail();
@@ -151,13 +153,17 @@ public class MerchantServiceRouter {
             return response;
         }
 
-        public String registerCustomer(Customer data) {
-            String email = data.getEmail();
-            Builders.validate(merchantServiceProvider.checkCustomerIsNew(email), String.format("Customer %s has already been migrated", email));
-            String merchantUserReference = merchantServiceProvider.registerCustomer(email, data.getCustomerData());
+        public String registerCustomer(MigrationResponse data) {
+            String email = data.getMigrationData().getData().getEmail();
+            String merchantUserReference = merchantServiceProvider.registerCustomer(email, data.getMigrationData().getData().getCustomerData());
             Builders.validate(!Builders.isNullOrEmpty(merchantUserReference), String.format("Failed to register customer %s with merchant", email));
             Builders.validate(merchantServiceProvider.sendPasswordResetEmail(merchantUserReference), String.format("Failed to send password reset email to %s", email));
             return merchantUserReference;
+        }
+
+        public boolean checkCustomerAlreadyExists(MigrationResponse data) {
+            String email = data.getMigrationData().getData().getEmail();
+            return merchantServiceProvider.checkCustomerAlreadyExists(email);
         }
 
         public void populateCart(String email, CartData cartData) {
@@ -168,12 +174,20 @@ public class MerchantServiceRouter {
             Builders.validate(expresslyProvider.finaliseMigrationOfCustomerData(campaignCustomerUuid), String.format("Couldn't confirm the migration of %s with xly server", campaignCustomerUuid));
         }
 
-        public String getMigrationRedirectLocation() {
-            return merchantServiceProvider.getPopupRedirectLocation();
+        public String getMigratedRedirectLocation() {
+            return merchantServiceProvider.getMigratedRedirectLocation();
         }
 
-        public void getPopup(HttpServletRequest request, HttpServletResponse response) {
-            merchantServiceProvider.popupHandler(request, response);
+        public void getPopup(HttpServletRequest request, HttpServletResponse response) throws IOException {
+            merchantServiceProvider.popupHandler(request, response, expresslyProvider);
+        }
+
+        public void loginCustomer(String merchantUserReference, HttpServletRequest request, HttpServletResponse response) throws IOException {
+            merchantServiceProvider.loginCustomer(merchantUserReference, request, response);
+        }
+
+        public void handleCustomerAlreadyExists(MigrationResponse data, HttpServletRequest request, HttpServletResponse response) throws IOException {
+            merchantServiceProvider.handleCustomerAlreadyExists(data.getMigrationData().getData().getEmail(), request, response);
         }
     }
 }

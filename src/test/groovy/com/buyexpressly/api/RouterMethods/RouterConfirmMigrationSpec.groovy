@@ -89,7 +89,7 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
                 assert data.emails.get(0).email == expectedEmail
                 expectedEmail
         }
-        1 * provider.checkCustomerIsNew(expectedEmail) >> true
+        1 * provider.checkCustomerAlreadyExists(expectedEmail) >> true
         1 * provider.sendPasswordResetEmail(expectedEmail) >> true
         1 * provider.storeCartData(_ as String, _ as CartData) >> {
             String requestEmail, CartData data ->

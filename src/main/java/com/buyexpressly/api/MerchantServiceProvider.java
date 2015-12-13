@@ -9,12 +9,13 @@ import com.buyexpressly.api.resource.server.CustomerData;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 
 public interface MerchantServiceProvider {
     // Called by MerchantServiceRouter.displayPopup()
-    void popupHandler(HttpServletRequest request, HttpServletResponse response);
+    void popupHandler(HttpServletRequest request, HttpServletResponse response, ExpresslyProvider expresslyProvider) throws IOException;
 
     String registerCustomer(String email, CustomerData customerData);
 
@@ -32,9 +33,13 @@ public interface MerchantServiceProvider {
 
     String getLocale();
 
-    Integer getCustomerReference(String email);
+    String getCustomerReference(String email);
 
-    boolean checkCustomerIsNew(String email);
+    boolean checkCustomerAlreadyExists(String email);
 
-    String getPopupRedirectLocation();
+    String getMigratedRedirectLocation();
+
+    void loginCustomer(String merchantUserReference, HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    void handleCustomerAlreadyExists(String email, HttpServletRequest request, HttpServletResponse response) throws IOException;
 }
