@@ -9,7 +9,6 @@ import com.buyexpressly.api.resource.server.CustomerData;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -44,7 +43,6 @@ public interface MerchantServiceProvider {
      * @param merchantUserReference
      * @param request
      * @param response
-     * @throws IOException
      */
     void loginAndRedirectCustomer(String merchantUserReference, HttpServletRequest request, HttpServletResponse response);
 
@@ -53,7 +51,6 @@ public interface MerchantServiceProvider {
      * @param email can be null
      * @param request
      * @param response
-     * @throws IOException
      */
     void handleCustomerAlreadyExists(String email, HttpServletRequest request, HttpServletResponse response);
 }
