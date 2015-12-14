@@ -15,7 +15,7 @@ public enum MerchantServiceRoute {
     GET_INVOICES("/expressly/api/batch/invoice", "POST", true),
     CHECK_EMAILS("/expressly/api/batch/customer", "POST", true),
     PING_REGISTERED("/expressly/api/registered", "GET", true),
-    CONFIRM_MIGRATION("/expressly/api/(?<campaignCustomerUuid>[A-z0-9\\-]{36})/migrate", "GET", true);
+    CONFIRM_MIGRATION("/expressly/api/(?<campaignCustomerUuid>[A-z0-9\\-]{36})/migrate", "GET", false);
 
     private final Pattern uriRegex;
     private final String httpMethod;

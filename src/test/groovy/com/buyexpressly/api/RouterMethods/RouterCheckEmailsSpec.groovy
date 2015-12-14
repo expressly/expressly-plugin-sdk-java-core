@@ -1,6 +1,8 @@
 package com.buyexpressly.api.RouterMethods
 
 import com.buyexpressly.api.MerchantServiceRoute
+import com.buyexpressly.api.resource.merchant.EmailAddressRequest
+import com.buyexpressly.api.resource.merchant.EmailStatusListResponse
 
 class RouterCheckEmailsSpec extends RouterAbstractRouteSpec {
 
@@ -31,28 +33,18 @@ class RouterCheckEmailsSpec extends RouterAbstractRouteSpec {
         router.route(request, response)
 
         then: "I see that the provider is called with the correct request data"
-        1 * provider.getExistingEmails(_ as List<String>) >> { List<String> emails ->
-            assert emails.get(0).size() == 4
-            assert  emails.get(0) == ["a@test.com", "b@test.com", "c@test.com", "d@test.com"]
-            [emails.get(0).get(1)]
-        }
-        1 * provider.getPendingEmails(_ as List<String>) >> { List<String> emails ->
-            assert emails.get(0).size() == 4
-            assert  emails.get(0) == ["a@test.com", "b@test.com", "c@test.com", "d@test.com"]
-            [emails.get(0).get(2)]
-        }
-        1 * provider.getDeletedEmails(_ as List<String>) >> { List<String> emails ->
-            assert emails.get(0).size() == 4
-            assert  emails.get(0) == ["a@test.com", "b@test.com", "c@test.com", "d@test.com"]
-            [emails.get(0).get(0)]
+        1 * provider.checkCustomerStatus(_ as EmailAddressRequest) >> { EmailAddressRequest emails ->
+            assert emails.emails.size() == 4
+            assert  emails.emails == ["a@test.com", "b@test.com", "c@test.com", "d@test.com"]
+            EmailStatusListResponse.builder().addExisting(emails.emails.subList(0, 1)).build()
         }
 
         and: "I can see that the response is written correctly"
         responseString.replaceAll('\\s*', '') == """
                 {
-                    "existing": ["b@test.com"],
-                    "pending" : ["c@test.com"],
-                    "deleted" : ["a@test.com"]
+                    "existing": ["a@test.com"],
+                    "pending" : [],
+                    "deleted" : []
 
                 }
             """.replaceAll('\\s*', '')

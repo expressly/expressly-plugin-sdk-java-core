@@ -7,14 +7,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-public class XlyQuery extends StringEntity {
+public class ExpresslyQuery extends StringEntity {
 
-    public XlyQuery(String string) throws UnsupportedEncodingException {
+    public ExpresslyQuery(String string) throws UnsupportedEncodingException {
         super(string, ContentType.APPLICATION_JSON);
     }
 
-    public static  <T> XlyQuery toJsonEntity(T request) throws IOException {
+    public static  <T> ExpresslyQuery toJsonEntity(T request) throws IOException {
         String json = new ObjectMapper().writer().writeValueAsString(request);
-        return new XlyQuery(json);
+        return new ExpresslyQuery(json);
     }
 }

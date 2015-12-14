@@ -3,7 +3,7 @@ package com.buyexpressly.api.providers
 import com.buyexpressly.api.resource.error.ExpresslyException
 import com.buyexpressly.api.resource.server.RegisterPluginRequest
 import com.buyexpressly.api.resource.server.SuccessMessageResponse
-import com.buyexpressly.api.resource.server.XlyQuery
+import com.buyexpressly.api.resource.server.ExpresslyQuery
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.http.HttpEntity
 import org.apache.http.HttpResponse
@@ -107,7 +107,7 @@ class ExpresslyHttpClientSpec extends Specification {
 
         and: "I have an entity"
         RegisterPluginRequest query = new RegisterPluginRequest(XLY_KEY, XLY_SERVER_URL, "v2");
-        XlyQuery xlyQuery = XlyQuery.toJsonEntity(query)
+        ExpresslyQuery xlyQuery = ExpresslyQuery.toJsonEntity(query)
 
         when: "I try to add an entity to my request builder"
         client.withRequestBody(xlyQuery)

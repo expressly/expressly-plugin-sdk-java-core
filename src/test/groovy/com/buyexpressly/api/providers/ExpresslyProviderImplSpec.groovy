@@ -5,7 +5,7 @@ import com.buyexpressly.api.resource.server.BannerDetailResponse
 import com.buyexpressly.api.resource.server.MigrationResponse
 import com.buyexpressly.api.resource.server.RegisterPluginRequest
 import com.buyexpressly.api.resource.server.SuccessMessageResponse
-import com.buyexpressly.api.resource.server.XlyQuery
+import com.buyexpressly.api.resource.server.ExpresslyQuery
 import org.apache.commons.lang.RandomStringUtils
 import org.codehaus.jackson.map.ObjectMapper
 import spock.lang.Specification
@@ -120,9 +120,9 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.REGISTER.endpoint
                 client
         }
-        1 * client.withRequestBody(_ as XlyQuery) >> {
-            XlyQuery query ->
-                query instanceof XlyQuery
+        1 * client.withRequestBody(_ as ExpresslyQuery) >> {
+            ExpresslyQuery query ->
+                query instanceof ExpresslyQuery
                 ObjectMapper om = new ObjectMapper()
                 RegisterPluginRequest request = om.readValue(query.content, RegisterPluginRequest.class)
                 request.apiBaseUrl == requestApiBaseUrl
@@ -153,9 +153,9 @@ class ExpresslyProviderImplSpec extends Specification {
                 assert endpoint == ExpresslyApiEndpoint.REGISTER.endpoint
                 client
         }
-        1 * client.withRequestBody(_ as XlyQuery) >> {
-            XlyQuery query ->
-                query instanceof XlyQuery
+        1 * client.withRequestBody(_ as ExpresslyQuery) >> {
+            ExpresslyQuery query ->
+                query instanceof ExpresslyQuery
                 ObjectMapper om = new ObjectMapper()
                 RegisterPluginRequest request = om.readValue(query.content, RegisterPluginRequest.class)
                 request.apiBaseUrl == requestApiBaseUrl

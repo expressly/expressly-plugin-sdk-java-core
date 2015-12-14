@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface MerchantServiceProvider {
     // Called by MerchantServiceRouter.displayPopup()
-    void popupHandler(HttpServletRequest request, HttpServletResponse response, ExpresslyProvider expresslyProvider) throws IOException;
+    void popupHandler(HttpServletRequest request, HttpServletResponse response, ExpresslyProvider expresslyProvider);
 
     String registerCustomer(String email, CustomerData customerData);
 
@@ -23,7 +23,7 @@ public interface MerchantServiceProvider {
 
     boolean createCustomerCart(String customerReference, CartData cartData);
 
-    CustomerData getCustomerData(String customerReference);
+    CustomerData getCustomerData(String email);
 
     EmailStatusListResponse checkCustomerStatus(EmailAddressRequest emailAddressRequest);
 
@@ -33,13 +33,27 @@ public interface MerchantServiceProvider {
 
     String getLocale();
 
-    String getCustomerReference(String email);
-
     boolean checkCustomerAlreadyExists(String email);
 
-    String getMigratedRedirectLocation();
+    /**
+     *
+     * Logs the customer session in
+     * Needs to know where the customer is being redirected to.!
+     * (log in landing page).
+     *
+     * @param merchantUserReference
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    void loginAndRedirectCustomer(String merchantUserReference, HttpServletRequest request, HttpServletResponse response);
 
-    void loginCustomer(String merchantUserReference, HttpServletRequest request, HttpServletResponse response) throws IOException;
-
-    void handleCustomerAlreadyExists(String email, HttpServletRequest request, HttpServletResponse response) throws IOException;
+    /**
+     *
+     * @param email can be null
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    void handleCustomerAlreadyExists(String email, HttpServletRequest request, HttpServletResponse response);
 }

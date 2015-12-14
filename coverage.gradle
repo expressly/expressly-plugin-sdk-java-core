@@ -5,10 +5,10 @@ apply plugin: 'jacoco'
 ext {
     limits = [
             'instruction': 70,
-            'branch'     : 65,
-            'line'       : 70,
-            'complexity' : 60,
-            'method'     : 60,
+            'branch'     : 70,
+            'line'       : 80,
+            'complexity' : 70,
+            'method'     : 80,
             'class'      : 100
     ]
 }
