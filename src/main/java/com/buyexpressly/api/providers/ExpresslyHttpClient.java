@@ -1,7 +1,7 @@
 package com.buyexpressly.api.providers;
 
 import com.buyexpressly.api.resource.error.ExpresslyException;
-import com.buyexpressly.api.resource.server.XlyQuery;
+import com.buyexpressly.api.resource.server.ExpresslyQuery;
 import com.buyexpressly.api.util.Builders;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -46,7 +46,7 @@ class ExpresslyHttpClient {
         }
     }
 
-    public <Q extends XlyQuery> void withRequestBody(Q query) {
+    public <Q extends ExpresslyQuery> void withRequestBody(Q query) {
         this.requestBuilder = requestBuilder.setEntity(query);
     }
 

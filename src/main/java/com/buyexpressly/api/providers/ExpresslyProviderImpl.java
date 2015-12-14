@@ -6,7 +6,7 @@ import com.buyexpressly.api.resource.server.BannerDetailResponse;
 import com.buyexpressly.api.resource.server.MigrationResponse;
 import com.buyexpressly.api.resource.server.RegisterPluginRequest;
 import com.buyexpressly.api.resource.server.SuccessMessageResponse;
-import com.buyexpressly.api.resource.server.XlyQuery;
+import com.buyexpressly.api.resource.server.ExpresslyQuery;
 import com.buyexpressly.api.util.Builders;
 import com.buyexpressly.api.util.EncodingUtils;
 import org.apache.http.client.methods.HttpDelete;
@@ -42,7 +42,7 @@ public final class ExpresslyProviderImpl implements ExpresslyProvider {
         Builders.pattern(apiBaseUrl, "apiBaseUrl", "http(s)?://.+");
         RegisterPluginRequest query = new RegisterPluginRequest(expresslyApiKey, apiBaseUrl, "v2");
         ExpresslyHttpClient client = expresslyClientFactory.makeClient(HttpPost.METHOD_NAME, ExpresslyApiEndpoint.REGISTER.getEndpoint());
-        client.withRequestBody(XlyQuery.toJsonEntity(query));
+        client.withRequestBody(ExpresslyQuery.toJsonEntity(query));
         String response = client.call(String.class);
         return "204".equals(response);
     }
