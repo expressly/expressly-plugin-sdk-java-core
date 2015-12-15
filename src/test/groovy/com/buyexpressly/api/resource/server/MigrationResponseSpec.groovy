@@ -12,7 +12,7 @@ class MigrationResponseSpec extends Specification {
         when: "I try to map a full migration response object"
         MigrationResponse mapped = new ObjectMapper().readValue(expectedMigrationResponse, MigrationResponse)
 
-        then: "I can see i can retrieve the infromation from the migration response"
+        then: "I can see i can retrieve the information from the migration response"
         mapped instanceof MigrationResponse
         mapped.migrationData instanceof MigrationData
         mapped.migrationData.data.email == expectedEmail
