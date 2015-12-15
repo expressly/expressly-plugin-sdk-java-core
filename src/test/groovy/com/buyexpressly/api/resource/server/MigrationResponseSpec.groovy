@@ -9,15 +9,14 @@ class MigrationResponseSpec extends Specification {
         def expectedEmail = "test@email.com"
         String expectedMigrationResponse = expectedCustomerResponse(expectedEmail)
 
-        when:"I try to map a full migration response object"
+        when: "I try to map a full migration response object"
         MigrationResponse mapped = new ObjectMapper().readValue(expectedMigrationResponse, MigrationResponse)
 
-        then "I can see i can retrieve the infromation from the migration response":
+        then: "I can see i can retrieve the infromation from the migration response"
         mapped instanceof MigrationResponse
         mapped.migrationData instanceof MigrationData
         mapped.migrationData.data.email == expectedEmail
         mapped.cartData instanceof CartData
-
     }
 
     def String expectedCustomerResponse(String expectedEmail) {
