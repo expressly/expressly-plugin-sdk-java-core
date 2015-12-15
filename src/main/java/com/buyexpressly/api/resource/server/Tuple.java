@@ -1,5 +1,6 @@
 package com.buyexpressly.api.resource.server;
 
+import com.buyexpressly.api.util.Builders;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 
@@ -12,6 +13,17 @@ public final class Tuple {
 
     private Tuple() {
 
+    }
+
+    private Tuple(String field, String value) {
+        Builders.required(field, "field in Tuple");
+        Builders.required(value, "value in Tuple");
+        this.field = field;
+        this.value = value;
+    }
+
+    public static Tuple build(String field, String value) {
+        return new Tuple(field, value);
     }
 
     public String getField() {

@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonMethod;
 
 import java.util.Objects;
 
+//TODO[][]: create full tests for this class, consider if it needs all the comparator stuff.
 @JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class CartData {
     private String couponCode;

@@ -100,5 +100,28 @@ class CustomerDataSpec extends Specification {
             addresses[1].address1 == 'addr2'
         }
     }
+    def "I can build a customer with only a first, last name, gender and one address "() {
+        given: "I have an object mapper to create the entities that don't have builders yet"
+        ObjectMapper mapper = new ObjectMapper()
+
+        when: "I use the builder"
+        CustomerData entity = CustomerData.builder()
+                .withFirstName('Marc')
+                .withGender('M')
+                .withLastName('Smith')
+                .addAddress(mapper.readValue('{"address1":"addr1"}', Address))
+                .build()
+
+        then: "I see that the values are set correctly"
+        with(entity) {
+            firstName == 'Marc'
+            lastName == 'Smith'
+            gender == 'M'
+            billingAddress == 0
+            shippingAddress == 0
+            addresses[0].address1 == 'addr1'
+        }
+    }
+
 
 }

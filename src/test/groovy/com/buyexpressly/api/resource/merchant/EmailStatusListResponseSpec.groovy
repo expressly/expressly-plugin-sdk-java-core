@@ -3,7 +3,7 @@ package com.buyexpressly.api.resource.merchant
 import spock.lang.Specification
 
 class EmailStatusListResponseSpec extends Specification {
-    def"test"(){
+    def"I can build an EmailStatusListResponse Object"(){
         given:
         EmailStatusListResponse response;
         def expectedExisting = ["a@test.com","b@test.com"];
@@ -18,7 +18,7 @@ class EmailStatusListResponseSpec extends Specification {
         response.deleted == expectedDeleted
         response.pending == expectedPending
     }
-    def"testb"(){
+    def"I can build an EmailStatusListResponse with a null Existing collection of emails"(){
         given:
         EmailStatusListResponse response;
         def expectedExisting = null;
@@ -33,7 +33,7 @@ class EmailStatusListResponseSpec extends Specification {
         response.deleted == expectedDeleted
         response.pending == expectedPending
     }
-    def"testc"(){
+    def"I can build an EmailStatusListResponse with a null Deleted collection of emails"(){
         given:
         EmailStatusListResponse response;
         def expectedExisting = ["a@test.com","b@test.com"];
@@ -49,7 +49,7 @@ class EmailStatusListResponseSpec extends Specification {
         response.pending == expectedPending
     }
 
-    def "testd"() {
+    def "I can build an EmailStatusListResponse with a null Pending collection of emails"() {
         given:
         EmailStatusListResponse response;
         def expectedExisting = ["a@test.com", "b@test.com"];

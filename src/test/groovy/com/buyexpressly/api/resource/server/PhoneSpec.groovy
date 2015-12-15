@@ -1,5 +1,6 @@
 package com.buyexpressly.api.resource.server
 
+import com.buyexpressly.api.resource.error.ExpresslyException
 import org.codehaus.jackson.map.ObjectMapper
 import spock.lang.Specification
 
@@ -15,5 +16,42 @@ class PhoneSpec extends Specification {
         phone.countryCode == 44
         phone.number == '555 123'
         phone.type == 'L'
+    }
+
+    def "a phone object can be built" () {
+        when: "I try to build a phone object"
+        Phone phone = Phone.builder()
+                .withCountryCode(44)
+                .withNumber("555 123")
+                .withType("L")
+                .build()
+
+        then: "I can see that the values are populated correctly"
+        phone.countryCode == 44
+        phone.number == '555 123'
+        phone.type == 'L'
+    }
+    def "a phone object can be built just with a phone number" () {
+        when: "I try to build a phone object"
+        Phone phone = Phone.builder()
+                .withNumber("555 123")
+                .build()
+
+        then: "I can see that the values are populated correctly"
+        phone.countryCode == null
+        phone.number == '555 123'
+        phone.type == null
+    }
+
+    def "I can't build a phone object without a phone number"(){
+        when: "I try to build a phone object"
+        Phone phone = Phone.builder()
+                .withCountryCode(44)
+                .withType("L")
+                .build()
+
+        then:"I can see an error occurs"
+        ExpresslyException expresslyException = thrown()
+        expresslyException.message == "field [number] is required"
     }
 }

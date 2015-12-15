@@ -1,4 +1,5 @@
 package com.buyexpressly.api.RouterMethods
+
 import com.buyexpressly.api.MerchantServiceRoute
 import com.buyexpressly.api.resource.error.ExpresslyException
 import com.buyexpressly.api.resource.server.CartData
@@ -27,14 +28,14 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
 
         1 * expresslyProvider.fetchMigrationCustomerData(_ as String) >> {
             String requestedCampaignCustomerUuid ->
-            assert requestedCampaignCustomerUuid == expectedCampaignCustomerUuid
-            def received = generateReceivedCustomer(expectedEmail)
+                assert requestedCampaignCustomerUuid == expectedCampaignCustomerUuid
+                def received = generateReceivedCustomer(expectedEmail)
 
-            ObjectMapper om = new ObjectMapper();
-            om.readValue(received, MigrationResponse.class)
+                ObjectMapper om = new ObjectMapper();
+                om.readValue(received, MigrationResponse.class)
 
         }
-        1 * provider.checkCustomerAlreadyExists(_ as String) >>{
+        1 * provider.checkCustomerAlreadyExists(_ as String) >> {
             String customerReference ->
                 assert customerReference == expectedEmail
                 false
@@ -76,14 +77,14 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
 
         1 * expresslyProvider.fetchMigrationCustomerData(_ as String) >> {
             String requestedCampaignCustomerUuid ->
-            assert requestedCampaignCustomerUuid == expectedCampaignCustomerUuid
-            def received = generateReceivedCustomer(expectedEmail)
+                assert requestedCampaignCustomerUuid == expectedCampaignCustomerUuid
+                def received = generateReceivedCustomer(expectedEmail)
 
-            ObjectMapper om = new ObjectMapper();
-            om.readValue(received, MigrationResponse.class)
+                ObjectMapper om = new ObjectMapper();
+                om.readValue(received, MigrationResponse.class)
 
         }
-        1 * provider.checkCustomerAlreadyExists(_ as String) >>{
+        1 * provider.checkCustomerAlreadyExists(_ as String) >> {
             String customerReference ->
                 assert customerReference == expectedEmail
                 true
@@ -94,21 +95,35 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
 
     }
 
-
-
     def "Already migrated user is handled"() {
-         when:
-         router.route(request, response)
+        when:
+        router.route(request, response)
 
-         then:
-         2 * request.requestURI >> "/expressly/api/${UUID.randomUUID().toString()}/migrate"
-         1 * expresslyProvider.fetchMigrationCustomerData(_ as String) >> {
-                 throw new ExpresslyException("_ USER_ALREADY_MIGRATED _")
-         }
+        then:
+        2 * request.requestURI >> "/expressly/api/${UUID.randomUUID().toString()}/migrate"
+        1 * expresslyProvider.fetchMigrationCustomerData(_ as String) >> {
+            throw new ExpresslyException("_ USER_ALREADY_MIGRATED _")
+        }
 
-         and: "the router request is called with the correct request data"
-         1 * provider.handleCustomerAlreadyExists(null, request, response)
-     }
+        and: "the router request is called with the correct request data"
+        1 * provider.handleCustomerAlreadyExists(null, request, response)
+    }
+
+    def "If the nature of the error is different, only an exception is thrown"() {
+        when:
+        router.route(request, response)
+
+        then:
+        2 * request.requestURI >> "/expressly/api/${UUID.randomUUID().toString()}/migrate"
+        1 * expresslyProvider.fetchMigrationCustomerData(_ as String) >> {
+            throw new ExpresslyException("_ different error _")
+        }
+
+        and: "the router request is called with the correct request data"
+        0 * provider.handleCustomerAlreadyExists(null, request, response)
+        ExpresslyException exception = thrown()
+        exception.message == "_ different error _"
+    }
 
     def GString generateReceivedCustomer(String expectedEmail) {
         return """
