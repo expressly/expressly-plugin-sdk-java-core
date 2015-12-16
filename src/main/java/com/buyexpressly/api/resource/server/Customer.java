@@ -4,15 +4,14 @@ import com.buyexpressly.api.util.Builders;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 
-//TODO[][]: write builder, remove contructor and test
 @JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class Customer {
+public final class Customer {
     private CustomerData customerData;
     private String email;
 
-    public Customer(CustomerData customerData, String email) {
-        this.customerData = Builders.requiresNonNull(customerData, "Customer Cannot be null");
-        this.email = Builders.requiresNonNull(email, "Invalid Email");
+    private Customer(CustomerData customerData, String email) {
+        this.customerData = customerData;
+        this.email = email;
     }
 
     private Customer() {
@@ -26,4 +25,10 @@ public class Customer {
         return email;
     }
 
+    public static Customer build(CustomerData data, String email) {
+        Builders.required(data, "customerData");
+        Builders.required(email, "email");
+        Builders.pattern(email, "email", "(.+@.+)");
+        return new Customer(data, email);
+    }
 }

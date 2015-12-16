@@ -3,7 +3,6 @@ package com.buyexpressly.api.resource.server;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 
-//TODO[][]: write test!!!
 @JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class BannerDetailResponse {
     private String bannerImageUrl;

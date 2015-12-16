@@ -123,7 +123,7 @@ public class MerchantServiceRouter {
         public CustomerDataResponse getCustomerData(String email) {
             Metadata meta = new Metadata(merchantServiceProvider.getShopUrl(), merchantServiceProvider.getLocale(), new ArrayList<Tuple>());
             CustomerData data = merchantServiceProvider.getCustomerData(email);
-            Customer customer = new Customer(data, email);
+            Customer customer = Customer.build(data, email);
             return CustomerDataResponse.builder().withData(customer).withMeta(meta).build();
         }
 

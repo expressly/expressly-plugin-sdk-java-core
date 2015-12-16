@@ -110,7 +110,6 @@ class AddressSpec extends Specification {
         when: "I try to build an address without an address field"
         Address.builder()
                 .withAddress1("261 Wellfield Road")
-             //   .withCity("Roath")
                 .withZip("CF24 3DG")
                 .withCountry("GB")
                 .build()
@@ -124,7 +123,6 @@ class AddressSpec extends Specification {
         Address.builder()
                 .withAddress1("261 Wellfield Road")
                 .withCity("Roath")
-               // .withZip("CF24 3DG")
                 .withCountry("GB")
                 .build()
 
@@ -138,7 +136,6 @@ class AddressSpec extends Specification {
                 .withAddress1("261 Wellfield Road")
                 .withCity("Roath")
                 .withZip("CF24 3DG")
-               // .withCountry("GB")
                 .build()
 
         then: "I can see an exception is thrown"
