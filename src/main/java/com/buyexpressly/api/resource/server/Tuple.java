@@ -12,7 +12,6 @@ public final class Tuple {
     private String value;
 
     private Tuple() {
-
     }
 
     private Tuple(String field, String value) {

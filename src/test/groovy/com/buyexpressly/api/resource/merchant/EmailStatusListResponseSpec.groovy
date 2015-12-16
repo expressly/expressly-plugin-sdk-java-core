@@ -1,5 +1,6 @@
 package com.buyexpressly.api.resource.merchant
 
+import org.codehaus.jackson.map.ObjectMapper
 import spock.lang.Specification
 
 class EmailStatusListResponseSpec extends Specification {
@@ -94,6 +95,20 @@ class EmailStatusListResponseSpec extends Specification {
         response.pending == []
     }
 
+    def "I can generate a json string from a EmailStatusList object"(){
+        given:
+        def expectedExisting = ["a@test.com","b@test.com"];
+        def expectedDeleted = null;
+        def expectedPending = ["e@test.com","f@test.com"];
+        EmailStatusListResponse response = EmailStatusListResponse.builder().addExisting(expectedExisting).addDeleted(expectedDeleted).addPending(expectedPending).build()
+
+
+        when:
+        def parsed = new ObjectMapper().writeValueAsString(response)
+
+        then:
+        parsed == '{"existing":["a@test.com","b@test.com"],"pending":["e@test.com","f@test.com"],"deleted":[]}'
+    }
 
 }
 

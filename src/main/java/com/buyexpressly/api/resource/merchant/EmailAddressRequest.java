@@ -10,7 +10,6 @@ public final class EmailAddressRequest {
     private List<String> emails;
 
     private EmailAddressRequest() {
-
     }
 
     public List<String> getEmails() {

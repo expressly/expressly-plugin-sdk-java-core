@@ -5,6 +5,8 @@ import com.buyexpressly.api.resource.server.Metadata;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 
+//TODO[][]: review tests
+
 @JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class CustomerDataResponse {
     private Metadata meta;

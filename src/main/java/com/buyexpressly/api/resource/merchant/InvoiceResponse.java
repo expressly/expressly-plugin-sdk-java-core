@@ -62,23 +62,23 @@ public final class InvoiceResponse {
         private BigDecimal tax;
         private final List<InvoiceOrderResponse> orders = new ArrayList<>();
 
-        public Builder setEmail(String email) {
+        public Builder withEmail(String email) {
             Builders.len(email, "email", 128);
             this.email = email;
             return  this;
         }
 
-        public Builder setPreTaxTotal(BigDecimal preTaxTotal) {
+        public Builder withPreTaxTotal(BigDecimal preTaxTotal) {
             this.preTaxTotal = preTaxTotal.setScale(2, BigDecimal.ROUND_UP);
             return  this;
         }
 
-        public Builder setPostTaxTotal(BigDecimal postTaxTotal) {
+        public Builder withPostTaxTotal(BigDecimal postTaxTotal) {
             this.postTaxTotal = postTaxTotal.setScale(2, BigDecimal.ROUND_UP);
             return  this;
         }
 
-        public Builder setTax(BigDecimal tax) {
+        public Builder withTax(BigDecimal tax) {
             this.tax = tax.setScale(2, BigDecimal.ROUND_UP);
             return  this;
         }

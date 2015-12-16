@@ -59,10 +59,10 @@ class MerchantServiceRouterSpec extends Specification {
         1 * request.getReader() >> new BufferedReader(new StringReader('{"customers": [{"email" : "a@mail.com"}]}'))
         def invoiceResponses = [
                 InvoiceResponse.builder()
-                        .setEmail("a@mail.com")
-                        .setPostTaxTotal(new BigDecimal(0))
-                        .setPreTaxTotal(new BigDecimal(0))
-                        .setTax(new BigDecimal(0))
+                        .withEmail("a@mail.com")
+                        .withPostTaxTotal(new BigDecimal(0))
+                        .withPreTaxTotal(new BigDecimal(0))
+                        .withTax(new BigDecimal(0))
                         .build()]
 
         when: "I invoke the route"

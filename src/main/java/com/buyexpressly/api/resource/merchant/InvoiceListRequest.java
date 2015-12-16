@@ -13,10 +13,6 @@ public final class InvoiceListRequest {
 
     }
 
-    public InvoiceListRequest(List<InvoiceRequest> customers) {
-        this.customers = customers;
-    }
-
     public List<InvoiceRequest> getCustomers() {
         return customers;
     }

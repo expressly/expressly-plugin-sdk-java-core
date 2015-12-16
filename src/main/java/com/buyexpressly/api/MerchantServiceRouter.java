@@ -13,14 +13,12 @@ import com.buyexpressly.api.resource.server.Customer;
 import com.buyexpressly.api.resource.server.CustomerData;
 import com.buyexpressly.api.resource.server.Metadata;
 import com.buyexpressly.api.resource.server.MigrationResponse;
-import com.buyexpressly.api.resource.server.Tuple;
 import com.buyexpressly.api.util.Builders;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class MerchantServiceRouter {
@@ -121,7 +119,7 @@ public class MerchantServiceRouter {
         }
 
         public CustomerDataResponse getCustomerData(String email) {
-            Metadata meta = new Metadata(merchantServiceProvider.getShopUrl(), merchantServiceProvider.getLocale(), new ArrayList<Tuple>());
+            Metadata meta = merchantServiceProvider.buildMerchantMetaData();
             CustomerData data = merchantServiceProvider.getCustomerData(email);
             Customer customer = Customer.build(data, email);
             return CustomerDataResponse.builder().withData(customer).withMeta(meta).build();

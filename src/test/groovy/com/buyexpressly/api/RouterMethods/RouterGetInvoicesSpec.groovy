@@ -42,10 +42,10 @@ class RouterGetInvoicesSpec extends RouterAbstractRouteSpec {
             }
 
             [InvoiceResponse.builder()
-                        .setEmail("john.smith@gmail.com")
-                        .setPostTaxTotal(110.0G)
-                        .setPreTaxTotal(100.0G)
-                        .setTax(10.0G)
+                        .withEmail("john.smith@gmail.com")
+                        .withPostTaxTotal(110.0G)
+                        .withPreTaxTotal(100.0G)
+                        .withTax(10.0G)
                         .add(InvoiceOrderResponse.builder()
                             .setOrderId('ORDER-5321311')
                             .setOrderDate(DateTime.parse("2015-07-10T11:42:00+01:00").toLocalDate())

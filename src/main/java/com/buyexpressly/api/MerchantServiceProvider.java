@@ -6,6 +6,7 @@ import com.buyexpressly.api.resource.merchant.InvoiceListRequest;
 import com.buyexpressly.api.resource.merchant.InvoiceResponse;
 import com.buyexpressly.api.resource.server.CartData;
 import com.buyexpressly.api.resource.server.CustomerData;
+import com.buyexpressly.api.resource.server.Metadata;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -101,18 +102,6 @@ public interface MerchantServiceProvider {
 
     /**
      *
-     * @return the url of the merchant, to be used in the customer metadata query
-     */
-    String getShopUrl();
-
-    /**
-     *
-     * @return a string to be used in the locale metadata field of request (example: "GBR")
-     */
-    String getLocale();
-
-    /**
-     *
      * Checks the database for whether the customer already exists
      *
      * @param email of the customer to check
@@ -143,4 +132,16 @@ public interface MerchantServiceProvider {
      * @param response from the servlet
      */
     void handleCustomerAlreadyExists(String email, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * Builds a metadata object describing the merchant, used in the the customer retrieval response
+     *
+     * Can define:
+     * shopUrl: (optional) the url of the merchant, to be used in the customer metadata query
+     * locale: (optional) a string to be used in the locale metadata field of request (example: "GBR")
+     * issuerData: (optional) list of key value pairs with any extra data that might be of relevance
+     *
+     * @return a properly formatted metadata object
+     */
+    Metadata buildMerchantMetaData();
 }

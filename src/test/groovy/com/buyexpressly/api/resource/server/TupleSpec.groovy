@@ -54,7 +54,7 @@ class TupleSpec extends Specification {
 
         then:"I can see they are equivalent"
         tupleA == tupleB
-        tupleA == tupleA
+        tupleA.equals(tupleA)
         tupleB == tupleB
     }
 
