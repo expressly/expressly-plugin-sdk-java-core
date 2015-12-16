@@ -83,7 +83,7 @@ public final class Address {
         return country;
     }
 
-    private static final class Builder {
+    public static final class Builder {
         private String firstName;
         private String lastName;
         private String address1;

@@ -17,10 +17,6 @@ public final class Email {
         this.email = builder.email;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public String getAlias() {
         return alias;
     }
@@ -29,7 +25,11 @@ public final class Email {
         return email;
     }
 
-    private static final class Builder {
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
         private String alias;
         private String email;
 

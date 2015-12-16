@@ -35,7 +35,7 @@ public final class Phone {
         return countryCode;
     }
 
-    private static final class Builder {
+    public static final class Builder {
         private String type;
         private String number;
         private Integer countryCode;
