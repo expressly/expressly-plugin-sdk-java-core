@@ -33,9 +33,6 @@ public final class Email {
         private String alias;
         private String email;
 
-        public Builder() {
-        }
-
         public Builder withAlias(String alias) {
             this.alias = alias;
             Builders.len(alias, "alias", 32);

@@ -44,7 +44,7 @@ public interface MerchantServiceProvider {
      *
      * @param email of the customer
      * @param customerData containing the information needed to store the customer
-     * @return
+     * @return customer reference by wich the customer is identified by throughout the flow
      */
     String registerCustomer(String email, CustomerData customerData);
 

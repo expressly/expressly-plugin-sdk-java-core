@@ -96,9 +96,6 @@ public final class Address {
         private String stateProvince;
         private String country;
 
-        public Builder() {
-        }
-
         public Builder withFirstName(String firstName) {
             Builders.len(firstName, "firstName", 64);
             this.firstName = firstName;
