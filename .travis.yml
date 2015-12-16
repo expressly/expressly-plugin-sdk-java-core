@@ -1,7 +1,11 @@
 language: java
-
 after_success:
-    - curl http://www.jpm4j.org/install/script > jpmInstall.sh
-    - sudo sh jpmInstall.sh
-    - sudo jpm install com.codacy:codacy-coverage-reporter:assembly
-    - codacy-coverage-reporter -l Java -r build/reports/jacoco/test/jacocoTestReport.xml -t $COVERALLS_REPO_TOKEN --prefix src/main/java/
+- curl http://www.jpm4j.org/install/script > jpmInstall.sh
+- sudo sh jpmInstall.sh
+- sudo jpm install com.codacy:codacy-coverage-reporter:assembly
+- codacy-coverage-reporter -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
+  -t $COVERALLS_REPO_TOKEN --prefix src/main/java/
+notifications:
+  hipchat:
+    rooms:
+      secure: CiNYoIuh9Oor3U4MbGigC3fN9EZIAqmQ7qY+KrbXdMoibtY6PXV0csl86dJuEoDNDi2qTo/++AmzwsiD7ca1aLnnCcVT2BQ3gx7PQvp0Rrw8R1aq244l+rtntJFWC4Q+3dzY7BMUP96a88WcKyV4mQ3qvfeQhdEEDrbotC3sYmUj0/Jhz1UC+UOdbCCR147EYuwHQDlgkUmZz8M+1vnIi9ylbCwZZNnff8Ldwt0u2gISO/Pjl1kaWElHy5VRntoWAK0rUFgwaF27SveAP089DyaZ31JwPz5DYRh9niKi/zr96NynZhbdfvG3zzGc68/dfAFyQbeziol8DNXgt6qcm/F9oOpuci99yYCDS+dcqwQxwPT5YBcz3ZjzChM3Nuqe4C6aAPWwtoWy6VaPjz/8A5H0xTM4saCoU0iy9I8Ven0llV9b7VtVJ+KMP5ZqS9b6UFbLgcm2/jRaOJpg5XhwleIT29XcmrXz13VI4Ibt9EvvdpwM4T7TOEHYCNQKFNAsYjn07zOt+6a/EwpQ0R78NYlXVgTwJglrRWKbJVQlw34IEU1ne+6XxSk0kOLPfXje5krfm7tvKyaAv4hSV9wILbDbEhTL9LUjGgdtTDRbErk8XJruvDWFhRMaldzI1lKvfhcLryPPhfrJH5sTWA0eA7UyR46mnCYWre/no4CjnIs=
