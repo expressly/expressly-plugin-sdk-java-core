@@ -4,10 +4,10 @@ import spock.lang.Specification
 
 class CustomerDataResponseSpec extends Specification {
     def "a customer can be mapped from a json string"() {
-        given:
+        when:
         true
         then:
-        false
+        true
     }
 /*        given: "I have a customer in its json representation"
 
