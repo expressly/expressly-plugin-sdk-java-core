@@ -18,7 +18,7 @@ class InvoiceOrderResponseSpec extends Specification {
         entity.coupon == "COUPON_CODE"
         entity.currency == "GBP"
         entity.itemCount == 1
-        entity.orderDate == LocalDate.now().minusDays(2)
+        entity.orderDate == LocalDate.parse("2015-12-14")
         entity.orderId == "SDF-123"
 
 
@@ -33,7 +33,7 @@ class InvoiceOrderResponseSpec extends Specification {
                 .setCoupon("COUPON_CODE")
                 .setCurrency("GBP")
                 .setItemCount(1)
-                .setOrderDate(LocalDate.now().minusDays(2))
+                .setOrderDate(LocalDate.parse("2015-12-14"))
                 .setOrderId("SDF-123")
                 .build()
 
@@ -48,8 +48,7 @@ class InvoiceOrderResponseSpec extends Specification {
         def parsed = new ObjectMapper().writeValueAsString(generateOrder())
 
         then:
-        true
-        //parsed == """{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00}"""
+        parsed == """{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00}"""
     }
 
     def InvoiceOrderResponse generateOrder() {
@@ -60,7 +59,7 @@ class InvoiceOrderResponseSpec extends Specification {
                 .setCoupon("COUPON_CODE")
                 .setCurrency("GBP")
                 .setItemCount(1)
-                .setOrderDate(LocalDate.now().minusDays(2))
+                .setOrderDate(LocalDate.parse("2015-12-14"))
                 .setOrderId("SDF-123")
                 .build()
     }

@@ -45,8 +45,7 @@ class InvoiceListResponseSpec extends Specification {
                 .build())
 
         then:
-        true
-        //parsed == """{"invoices":[{"email":"a@email.com","orderCount":2,"preTaxTotal":100.00,"postTaxTotal":120.00,"tax":20.00,"orders":[{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00},{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00}]}]}"""
+        parsed == """{"invoices":[{"email":"a@email.com","orderCount":2,"preTaxTotal":100.00,"postTaxTotal":120.00,"tax":20.00,"orders":[{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00},{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00}]}]}"""
     }
 
     def InvoiceOrderResponse generateOrder() {
@@ -57,7 +56,7 @@ class InvoiceListResponseSpec extends Specification {
                 .setCoupon("COUPON_CODE")
                 .setCurrency("GBP")
                 .setItemCount(1)
-                .setOrderDate(LocalDate.now().minusDays(2))
+                .setOrderDate(LocalDate.parse("2015-12-14"))
                 .setOrderId("SDF-123")
                 .build()
     }
