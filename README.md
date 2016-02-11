@@ -1,4 +1,4 @@
-[![Expressly](https://buyexpressly.com/assets/img/expressly-logo-sm-gray.png)](https://buyexpressly.com)
+[![Expressly](http://developer.buyexpressly.com/img/expressly-logo-sm-gray.png)](https://buyexpressly.com)
 # Expressly Plug-in Java SDK
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.buyexpressly/plugin-sdk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.buyexpressly/plugin-sdk)
