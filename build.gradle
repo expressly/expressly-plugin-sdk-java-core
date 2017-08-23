@@ -5,9 +5,10 @@ apply plugin: 'groovy'
 apply plugin: 'checkstyle'
 apply from: "$rootDir/coverage.gradle"
 
+Properties versionProperties = new Properties();
+versionProperties.load(new File(rootDir, "src/main/resources/version.properties").newInputStream())
+version = versionProperties.getProperty("version")
 group = 'com.buyexpressly'
-version = '2.7.0'
-
 
 signing {
     required { gradle.taskGraph.hasTask('uploadArchives') }

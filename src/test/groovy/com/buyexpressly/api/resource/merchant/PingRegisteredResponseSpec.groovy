@@ -30,6 +30,6 @@ class PingRegisteredResponseSpec extends Specification {
         result.version == 'V2'
         result.lightbox == 'javascript'
         result.platformName == 'Expressly Java SDK'
-        result.platformVersion == '2.7.0'
+        result.platformVersion ==~ /\d+\.\d+\.\d+/
     }
 }
