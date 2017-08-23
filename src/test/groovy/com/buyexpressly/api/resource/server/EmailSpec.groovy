@@ -1,16 +1,20 @@
 package com.buyexpressly.api.resource.server
 
 import com.buyexpressly.api.resource.error.ExpresslyException
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class EmailSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "an email can be mapped from a json string"() {
         given: "I have a email  in its json representation"
         String json = '{"alias":"personal","email":"email@test.com"}'
 
         when: "I map it"
-        Email email = new ObjectMapper().readValue(json, Email)
+        Email email = ObjectMapperFactory.make().readValue(json, Email)
 
         then: "I can see that the values are populated correctly"
         email.alias == "personal"
@@ -42,7 +46,7 @@ class EmailSpec extends Specification {
 
     def "I can't build an email object without an email"(){
         when: "I try to build an Email object"
-        Email email = Email.builder()
+        Email.builder()
                 .withAlias("persoanl")
                 .build()
 

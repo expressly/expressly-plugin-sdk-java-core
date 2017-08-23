@@ -1,11 +1,16 @@
 package com.buyexpressly.api.resource.server
 
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import spock.lang.Specification
 
 class CustomerDataSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a customer can be mapped from a json string"() {
         given: "I have a customer in its json representation"
         String json = '{' +
@@ -23,7 +28,7 @@ class CustomerDataSpec extends Specification {
 
 
         when: "I map it"
-        CustomerData entity = new ObjectMapper().readValue(json, CustomerData)
+        CustomerData entity = ObjectMapperFactory.make().readValue(json, CustomerData)
 
         then: "I can see that the values are populated correctly"
         with(entity) {
@@ -33,26 +38,26 @@ class CustomerDataSpec extends Specification {
             billingAddress == 0
             shippingAddress == 0
             dateUpdated == DateTime.parse('2015-11-25T13:21:04+00:00')
-            onlinePresence[0].field == 'twitter'
-            onlinePresence[0].value == 'mgsmith57'
-            emails[0].email == 'someone@test.com'
-            phones[0].number == '555 123'
-            phones[0].type == 'L'
-            phones[0].countryCode == 44
-            addresses[0].firstName == 'Marc'
-            addresses[0].lastName == 'SMith'
-            addresses[0].address1 == '261 Wellfield Road'
-            addresses[0].city == 'Roath'
-            addresses[0].zip == 'CF24 3DG'
-            addresses[0].phone == 0
-            addresses[0].stateProvince == 'Cardiff'
-            addresses[0].country == 'GB'
+            onlinePresence.get(0).field == 'twitter'
+            onlinePresence.get(0).value == 'mgsmith57'
+            emails.get(0).email == 'someone@test.com'
+            phones.get(0).number == '555 123'
+            phones.get(0).type == 'L'
+            phones.get(0).countryCode == 44
+            addresses.get(0).firstName == 'Marc'
+            addresses.get(0).lastName == 'SMith'
+            addresses.get(0).address1 == '261 Wellfield Road'
+            addresses.get(0).city == 'Roath'
+            addresses.get(0).zip == 'CF24 3DG'
+            addresses.get(0).phone == 0
+            addresses.get(0).stateProvince == 'Cardiff'
+            addresses.get(0).country == 'GB'
         }
     }
 
     def "I can build a customer"() {
         given: "I have an object mapper to create the entities that don't have builders yet"
-        ObjectMapper mapper = new ObjectMapper()
+        ObjectMapper mapper = ObjectMapperFactory.make()
 
         when: "I use the builder"
         CustomerData entity = CustomerData.builder()
@@ -102,7 +107,7 @@ class CustomerDataSpec extends Specification {
     }
     def "I can build a customer with only a first, last name, gender and one address "() {
         given: "I have an object mapper to create the entities that don't have builders yet"
-        ObjectMapper mapper = new ObjectMapper()
+        ObjectMapper mapper = ObjectMapperFactory.make()
 
         when: "I use the builder"
         CustomerData entity = CustomerData.builder()

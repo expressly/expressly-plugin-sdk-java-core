@@ -1,19 +1,13 @@
 package com.buyexpressly.api.resource.merchant;
 
 import com.buyexpressly.api.util.Builders;
-import com.buyexpressly.api.util.LocalDateIso8601DateSerializer;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
 
-@JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class InvoiceOrderResponse {
 
     private final String id;
-    @JsonSerialize(using = LocalDateIso8601DateSerializer.class)
     private final LocalDate date;
     private final int itemCount;
     private final String coupon;

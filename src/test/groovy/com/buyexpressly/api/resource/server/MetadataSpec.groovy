@@ -1,9 +1,13 @@
 package com.buyexpressly.api.resource.server
 
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class MetadataSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a Metadata object can be parsed from a received json string"() {
         given: "I have a Metadata in its properly formatted json representation"
         def expectedSender = 'http://www.shop.com'
@@ -25,7 +29,7 @@ class MetadataSpec extends Specification {
                 """
 
         when: "I map it"
-        Metadata entity = new ObjectMapper().readValue(json, Metadata)
+        Metadata entity = ObjectMapperFactory.make().readValue(json, Metadata)
 
         then: "I can see that the values are populated correctly"
         entity.sender == expectedSender

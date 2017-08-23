@@ -17,7 +17,6 @@ class MerchantServiceRouteSpec extends Specification {
 
         where:
         method | uri                                                           | expectedRoute                          | expectedParameters
-        'GET'  | '/expressly/api/ping'                                         | MerchantServiceRoute.PING              | [:]
         'GET'  | '/expressly/api/registered'                                   | MerchantServiceRoute.PING_REGISTERED   | [:]
         'GET'  | '/expressly/api/2d5ed0ea-077b-44ab-870f-dd056b446fe7'         | MerchantServiceRoute.DISPLAY_POPUP     | [campaignCustomerUuid: '2d5ed0ea-077b-44ab-870f-dd056b446fe7']
         'GET'  | '/expressly/api/user/a@example.com'                           | MerchantServiceRoute.GET_CUSTOMER      | [email: 'a@example.com']

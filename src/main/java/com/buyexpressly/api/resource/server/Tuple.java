@@ -1,12 +1,9 @@
 package com.buyexpressly.api.resource.server;
 
 import com.buyexpressly.api.util.Builders;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
 
 import java.util.Objects;
 
-@JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class Tuple {
     private String field;
     private String value;
@@ -55,8 +52,7 @@ public final class Tuple {
 
     @Override
     public String toString() {
-        return new StringBuilder("field='").append(field).append('\'')
-                .append(", value='").append(value).append('\'')
-                .toString();
+        return "field='" + field + '\'' +
+                ", value='" + value + '\'';
     }
 }

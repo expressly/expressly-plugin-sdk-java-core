@@ -6,14 +6,15 @@ import com.buyexpressly.api.resource.server.MigrationResponse
 import com.buyexpressly.api.resource.server.RegisterPluginRequest
 import com.buyexpressly.api.resource.server.SuccessMessageResponse
 import com.buyexpressly.api.resource.server.ExpresslyQuery
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang.RandomStringUtils
-import org.codehaus.jackson.map.ObjectMapper
 import spock.lang.Specification
 
 import java.util.regex.Pattern
 
 class ExpresslyProviderImplSpec extends Specification {
-    public static final String XLY_SERVER_URL = "http://mock.api.com";
+    public static final String XLY_SERVER_URL = "http://mock.api.com"
     public static final String TEST_UUID = UUID.randomUUID().toString()
     public static final String TEST_PASS = RandomStringUtils.randomAlphabetic(32)
     public static final String XLY_KEY = String.format("%s:%s", TEST_UUID, TEST_PASS).bytes.encodeBase64().toString()
@@ -21,10 +22,11 @@ class ExpresslyProviderImplSpec extends Specification {
     public static final String POST = "POST"
     public static final String DELETE = "DELETE"
 
-    ExpresslyProviderImpl expresslyProvider;
-    ExpresslyHttpClient client;
+    ExpresslyProviderImpl expresslyProvider
+    ExpresslyHttpClient client
 
     def setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
         expresslyProvider = new ExpresslyProviderImpl(XLY_SERVER_URL, XLY_KEY)
         expresslyProvider.expresslyClientFactory = Mock(ExpresslyClientFactory.class, constructorArgs: [XLY_SERVER_URL, XLY_KEY])
     }
@@ -68,7 +70,7 @@ class ExpresslyProviderImplSpec extends Specification {
         }
 
         when: "I request a ping"
-        boolean ping = expresslyProvider.ping();
+        boolean ping = expresslyProvider.ping()
 
         then: "I can see the provider treats the response accurately"
         ping
@@ -89,7 +91,7 @@ class ExpresslyProviderImplSpec extends Specification {
         }
 
         when: "I try to request a ping from xly"
-        expresslyProvider.ping();
+        expresslyProvider.ping()
 
         then: "I get a an exception"
         thrown(ExpresslyException)
@@ -101,7 +103,7 @@ class ExpresslyProviderImplSpec extends Specification {
 
 
         when:
-        boolean status = expresslyProvider.install(requestApiBaseUrl);
+        boolean status = expresslyProvider.install(requestApiBaseUrl)
 
         then:
         thrown(ExpresslyException)
@@ -123,7 +125,7 @@ class ExpresslyProviderImplSpec extends Specification {
         1 * client.withRequestBody(_ as ExpresslyQuery) >> {
             ExpresslyQuery query ->
                 query instanceof ExpresslyQuery
-                ObjectMapper om = new ObjectMapper()
+                ObjectMapper om = ObjectMapperFactory.make()
                 RegisterPluginRequest request = om.readValue(query.content, RegisterPluginRequest.class)
                 request.apiBaseUrl == requestApiBaseUrl
                 request.apiKey == XLY_KEY
@@ -135,7 +137,7 @@ class ExpresslyProviderImplSpec extends Specification {
         }
 
         when:
-        boolean status = expresslyProvider.install(requestApiBaseUrl);
+        boolean status = expresslyProvider.install(requestApiBaseUrl)
 
         then:
         status
@@ -156,7 +158,7 @@ class ExpresslyProviderImplSpec extends Specification {
         1 * client.withRequestBody(_ as ExpresslyQuery) >> {
             ExpresslyQuery query ->
                 query instanceof ExpresslyQuery
-                ObjectMapper om = new ObjectMapper()
+                ObjectMapper om = ObjectMapperFactory.make()
                 RegisterPluginRequest request = om.readValue(query.content, RegisterPluginRequest.class)
                 request.apiBaseUrl == requestApiBaseUrl
                 request.apiKey == XLY_KEY
@@ -168,7 +170,7 @@ class ExpresslyProviderImplSpec extends Specification {
         }
 
         when:
-        expresslyProvider.install(requestApiBaseUrl);
+        expresslyProvider.install(requestApiBaseUrl)
 
         then:
         thrown(ExpresslyException)
@@ -501,7 +503,7 @@ class ExpresslyProviderImplSpec extends Specification {
         def response = expresslyProvider.getCampaignBanner(requestEmail)
 
         then: "I can see the request was properly constructed"
-        response == null;
+        response == null
         thrown(ExpresslyException)
     }
 }

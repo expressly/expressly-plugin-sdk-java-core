@@ -3,6 +3,8 @@ package com.buyexpressly.api.providers;
 import com.buyexpressly.api.resource.error.ExpresslyException;
 import com.buyexpressly.api.resource.server.ExpresslyQuery;
 import com.buyexpressly.api.util.Builders;
+import com.buyexpressly.api.util.ObjectMapperFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
@@ -14,12 +16,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 
 class ExpresslyHttpClient {
-    protected static final PoolingHttpClientConnectionManager CONNECTION_MANAGER = new PoolingHttpClientConnectionManager();
+    private static final PoolingHttpClientConnectionManager CONNECTION_MANAGER = new PoolingHttpClientConnectionManager();
     private static final int MIN_ERROR_STATUS_CODE = 400;
     private static final int MAX_TOTAL_CONN = 200;
     private static final int MAX_CONN_PER_ROUTE = 20;
@@ -76,8 +77,8 @@ class ExpresslyHttpClient {
                     case "text/html":
                         return (R) EntityUtils.toString(entity);
                     case "application/json":
-                        ObjectMapper om = new ObjectMapper();
-                        return (R) om.readValue(EntityUtils.toString(entity), responseType);
+                        ObjectMapper om = ObjectMapperFactory.make();
+                        return om.readValue(EntityUtils.toString(entity), responseType);
                     default:
                         return (R) status;
                 }

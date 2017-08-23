@@ -1,13 +1,9 @@
 package com.buyexpressly.api.resource.server;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class Metadata {
     private String sender;
     private String locale;
@@ -27,7 +23,7 @@ public final class Metadata {
         return new Metadata(
                 sender == null ? "" : sender,
                 locale == null ? "" : locale,
-                issuerData == null ? new ArrayList<Tuple>() : Arrays.asList(issuerData));
+                issuerData == null ? new ArrayList<>() : Arrays.asList(issuerData));
     }
 
     public String getSender() {

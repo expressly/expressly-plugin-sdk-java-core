@@ -1,9 +1,17 @@
 package com.buyexpressly.api.resource.merchant
 
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
 class PingRegisteredResponseSpec extends Specification {
+    private ObjectMapper om
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+        om = ObjectMapperFactory.make()
+    }
+
     def "a PingRegisteredResponse object can be built"() {
         when: "I try to build a ping registered response"
         PingRegisteredResponse entity = PingRegisteredResponse.build()
@@ -13,11 +21,15 @@ class PingRegisteredResponseSpec extends Specification {
         entity.isRegistered()
     }
 
-    def "I can generate a json string from a ping response object"(){
+    def "I can generate a json string from a ping response object"() {
         when:
-        def parsed = new ObjectMapper().writeValueAsString(PingRegisteredResponse.build())
+        Map result = om.readValue(om.writeValueAsString(PingRegisteredResponse.build()), Map)
 
         then:
-        parsed == '{"registered":true}'
+        result.registered
+        result.version == 'V2'
+        result.lightbox == 'javascript'
+        result.platformName == 'Expressly Java SDK'
+        result.platformVersion == '2.7.0'
     }
- }
+}

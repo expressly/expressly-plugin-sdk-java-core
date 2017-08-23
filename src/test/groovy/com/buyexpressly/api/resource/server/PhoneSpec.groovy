@@ -1,16 +1,20 @@
 package com.buyexpressly.api.resource.server
 
 import com.buyexpressly.api.resource.error.ExpresslyException
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class PhoneSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a phone can be mapped from a json string"() {
         given: "I have a phone number in its json representation"
         String json = '{"type":"L","number":"555 123","countryCode":44}'
 
         when: "I map it"
-        Phone phone = new ObjectMapper().readValue(json, Phone)
+        Phone phone = ObjectMapperFactory.make().readValue(json, Phone)
 
         then: "I can see that the values are populated correctly"
         phone.countryCode == 44
@@ -45,7 +49,7 @@ class PhoneSpec extends Specification {
 
     def "I can't build a phone object without a phone number"(){
         when: "I try to build a phone object"
-        Phone phone = Phone.builder()
+        Phone.builder()
                 .withCountryCode(44)
                 .withType("L")
                 .build()

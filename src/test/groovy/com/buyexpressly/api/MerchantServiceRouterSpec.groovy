@@ -77,20 +77,4 @@ class MerchantServiceRouterSpec extends Specification {
 
     }
 
-    def "If authentication is not required then a 401 is not returned if the header is missing"() {
-        given: "I have a valid request route"
-        1 * request.getRequestURI() >> MerchantServiceRoute.PING.uriRegex
-        1 * request.getMethod() >> MerchantServiceRoute.PING.httpMethod
-        StringWriter out = new StringWriter();
-
-        when: "I invoke the route"
-        router.route(request, response)
-
-        then: "I see that authorisation is not checked and the provider is called"
-        0 * request.getHeader("Authorization")
-        0 * response.sendError(401)
-        _ * response.getWriter() >> new PrintWriter(out)
-        out.toString().replaceAll('\\s*', '') == '{ "expressly": "Stuff is happening!" }'.replaceAll('\\s*', '')
-    }
-
 }

@@ -4,9 +4,12 @@ import com.buyexpressly.api.resource.error.ExpresslyException
 import spock.lang.Specification
 
 class BuildersSpec extends Specification {
-    public static
-    final String API_KEY = "NDUxZDdjOTQtYzFmNy00ZjgwLTljYjktMGE1NGI5MWRmZjk1OkxxcDlsZDl2S05NUTlDd3dFNlVTTFhwYVh4Ymw4eWJn"
+    public static final String API_KEY = "NDUxZDdjOTQtYzFmNy00ZjgwLTljYjktMGE1NGI5MWRmZjk1OkxxcDlsZDl2S05NUTlDd3dFNlVTTFhwYVh4Ymw4eWJn"
     private String pattern = "(.+@.+)"
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
 
     def "I can't instantiate a Builders  Object"() {
         when:

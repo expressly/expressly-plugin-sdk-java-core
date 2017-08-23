@@ -1,13 +1,9 @@
 package com.buyexpressly.api.resource.merchant;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class EmailStatusListResponse {
     private final List<String> existing;
     private final List<String> pending;
@@ -29,17 +25,17 @@ public final class EmailStatusListResponse {
         private List<String> deleted = new ArrayList<>();
 
         public Builder addExisting(List<String> existing) {
-            this.existing.addAll(existing == null ? new ArrayList<String>() : existing);
+            this.existing.addAll(existing == null ? new ArrayList<>() : existing);
             return this;
         }
 
         public Builder addPending(List<String> pending) {
-            this.pending.addAll(pending == null ? new ArrayList<String>() : pending);
+            this.pending.addAll(pending == null ? new ArrayList<>() : pending);
             return this;
         }
 
         public Builder addDeleted(List<String> deleted) {
-            this.deleted.addAll(deleted == null ? new ArrayList<String>() : deleted);
+            this.deleted.addAll(deleted == null ? new ArrayList<>() : deleted);
             return this;
         }
 

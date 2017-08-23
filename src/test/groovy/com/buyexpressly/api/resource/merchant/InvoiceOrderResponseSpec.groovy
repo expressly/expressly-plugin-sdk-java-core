@@ -1,11 +1,15 @@
 package com.buyexpressly.api.resource.merchant
 
 import com.buyexpressly.api.resource.error.ExpresslyException
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import org.joda.time.LocalDate
 import spock.lang.Specification
 
 class InvoiceOrderResponseSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a InvoiceOrderResponse object can be built"() {
         when: "I try to build an InvoiceOrderResponse object"
         InvoiceOrderResponse entity = generateOrder()
@@ -45,13 +49,13 @@ class InvoiceOrderResponseSpec extends Specification {
 
     def "I can generate a json string from an invoice response object"() {
         when:
-        def parsed = new ObjectMapper().writeValueAsString(generateOrder())
+        def parsed = ObjectMapperFactory.make().writeValueAsString(generateOrder())
 
         then:
         parsed == """{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00}"""
     }
 
-    def InvoiceOrderResponse generateOrder() {
+    InvoiceOrderResponse generateOrder() {
         return InvoiceOrderResponse.builder()
                 .setPreTaxTotal(new BigDecimal(50))
                 .setTax(new BigDecimal(10))

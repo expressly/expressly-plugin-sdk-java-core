@@ -4,6 +4,8 @@ import com.buyexpressly.api.resource.error.ExpresslyException
 import com.buyexpressly.api.resource.server.RegisterPluginRequest
 import com.buyexpressly.api.resource.server.SuccessMessageResponse
 import com.buyexpressly.api.resource.server.ExpresslyQuery
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.http.HttpEntity
 import org.apache.http.HttpResponse
@@ -15,11 +17,10 @@ import org.apache.http.client.methods.RequestBuilder
 import org.apache.http.entity.ContentType
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
-import org.codehaus.jackson.map.ObjectMapper
 import spock.lang.Specification
 
 class ExpresslyHttpClientSpec extends Specification {
-    public static final String XLY_SERVER_URL = "http://mock.api.com";
+    public static final String XLY_SERVER_URL = "http://mock.api.com"
     public static final String TEST_UUID = UUID.randomUUID().toString()
     public static final String TEST_PASS = RandomStringUtils.randomAlphabetic(32)
     public static final String XLY_KEY = String.format("%s:%s", TEST_UUID, TEST_PASS).bytes.encodeBase64().toString()
@@ -28,6 +29,10 @@ class ExpresslyHttpClientSpec extends Specification {
     public static final String DELETE = "DELETE"
 
     ExpresslyHttpClient client
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
 
     def "I can instantiate the Expressly Http client"() {
         given: "I have a valid method, uri, apikey and server url"
@@ -106,7 +111,7 @@ class ExpresslyHttpClientSpec extends Specification {
         client = new ExpresslyHttpClient(method, uri, apiKey, expresslyEndpoint)
 
         and: "I have an entity"
-        RegisterPluginRequest query = new RegisterPluginRequest(XLY_KEY, XLY_SERVER_URL, "v2");
+        RegisterPluginRequest query = new RegisterPluginRequest(XLY_KEY, XLY_SERVER_URL, "v2")
         ExpresslyQuery xlyQuery = ExpresslyQuery.toJsonEntity(query)
 
         when: "I try to add an entity to my request builder"
@@ -115,7 +120,7 @@ class ExpresslyHttpClientSpec extends Specification {
         then: "I can see my request builder includes an enitity"
         HttpEntity requestEntity = client.requestBuilder.getEntity()
         requestEntity != null
-        ObjectMapper mapper = new ObjectMapper()
+        ObjectMapper mapper = ObjectMapperFactory.make()
         RegisterPluginRequest requestedQuery = mapper.readValue(requestEntity.content, RegisterPluginRequest.class)
         requestedQuery.apiBaseUrl == XLY_SERVER_URL
         requestedQuery.apiKey == XLY_KEY

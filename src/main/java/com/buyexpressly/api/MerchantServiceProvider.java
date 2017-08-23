@@ -27,16 +27,6 @@ import java.util.List;
 public interface MerchantServiceProvider {
     /**
      *
-     * Request the popup from the expressly server and render it.
-     *
-     * @param request from the servlet, the uri property includes the campaignCustomerUuid necessary to request the popup.
-     * @param response from the servlet, needed to handle rendering the popup.
-     * @param expresslyProvider used to request the popup html from the expressly server
-     */
-    void popupHandler(HttpServletRequest request, HttpServletResponse response, ExpresslyProvider expresslyProvider);
-
-    /**
-     *
      * Persists customer in the database
      *
      * the returned value will be used in the future to refer to the customer just created

@@ -42,9 +42,7 @@ class RouterCheckEmailsSpec extends RouterAbstractRouteSpec {
         and: "I can see that the response is written correctly"
         responseString.replaceAll('\\s*', '') == """
                 {
-                    "existing": ["a@test.com"],
-                    "pending" : [],
-                    "deleted" : []
+                    "existing": ["a@test.com"]
 
                 }
             """.replaceAll('\\s*', '')

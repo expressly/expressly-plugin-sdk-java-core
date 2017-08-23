@@ -1,9 +1,14 @@
 package com.buyexpressly.api.resource.merchant
 
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class EmailAddressRequestSpec extends Specification {
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "an EmailAddressRequest object can be parsed from json"() {
         given: "I have an email address request body to parse"
         def emailA = "a@email.com"
@@ -20,7 +25,7 @@ class EmailAddressRequestSpec extends Specification {
 """
 
         when: "I try to parse the string into an EmailAddressRequest object"
-        EmailAddressRequest entity = new ObjectMapper().readValue(requestBody, EmailAddressRequest)
+        EmailAddressRequest entity = ObjectMapperFactory.make().readValue(requestBody, EmailAddressRequest)
 
         then: "I can see that the values are populated correctly"
         entity instanceof EmailAddressRequest

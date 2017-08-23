@@ -1,10 +1,15 @@
 package com.buyexpressly.api.resource.merchant
 
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import org.joda.time.LocalDate
 import spock.lang.Specification
 
 class InvoiceListRequestSpec extends Specification {
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "an InvoiceListRequest object can be parsed from json"() {
         given: "I have an Invoice request body to parse"
         def expectedEmail = "test@email.com"
@@ -23,7 +28,7 @@ class InvoiceListRequestSpec extends Specification {
         """
 
         when: "I try to parse the string into an InvoiceListRequest object"
-        InvoiceListRequest entity = new ObjectMapper().readValue(requestBody, InvoiceListRequest)
+        InvoiceListRequest entity = ObjectMapperFactory.make().readValue(requestBody, InvoiceListRequest)
 
         then: "I can see that the values are populated correctly"
         entity instanceof InvoiceListRequest

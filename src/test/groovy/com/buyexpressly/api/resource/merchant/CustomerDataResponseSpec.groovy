@@ -7,18 +7,23 @@ import com.buyexpressly.api.resource.server.Email
 import com.buyexpressly.api.resource.server.Metadata
 import com.buyexpressly.api.resource.server.Phone
 import com.buyexpressly.api.resource.server.Tuple
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import spock.lang.Specification
 
 class CustomerDataResponseSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a customer can be mapped from a json string"() {
         given: "I have a customer data response in its json representation"
         String json = generateCustomerDataResponseString()
 
         when: "I map it"
-        CustomerDataResponse entity = new ObjectMapper().readValue(json, CustomerDataResponse)
+        CustomerDataResponse entity = ObjectMapperFactory.make().readValue(json, CustomerDataResponse)
 
         then: "I can see that the values are populated correctly"
         with(entity.data.customerData) {
@@ -28,26 +33,26 @@ class CustomerDataResponseSpec extends Specification {
             billingAddress == 0
             shippingAddress == 0
             dateUpdated == DateTime.parse('2015-11-25T13:21:04+00:00')
-            onlinePresence[0].field == 'twitter'
-            onlinePresence[0].value == 'mgsmith57'
-            emails[0].email == 'someone@test.com'
-            phones[0].number == '555 123'
-            phones[0].type == 'L'
-            phones[0].countryCode == 44
-            addresses[0].firstName == 'Marc'
-            addresses[0].lastName == 'SMith'
-            addresses[0].address1 == '261 Wellfield Road'
-            addresses[0].city == 'Roath'
-            addresses[0].zip == 'CF24 3DG'
-            addresses[0].phone == 0
-            addresses[0].stateProvince == 'Cardiff'
-            addresses[0].country == 'GB'
+            onlinePresence.get(0).field == 'twitter'
+            onlinePresence.get(0).value == 'mgsmith57'
+            emails.get(0).email == 'someone@test.com'
+            phones.get(0).number == '555 123'
+            phones.get(0).type == 'L'
+            phones.get(0).countryCode == 44
+            addresses.get(0).firstName == 'Marc'
+            addresses.get(0).lastName == 'SMith'
+            addresses.get(0).address1 == '261 Wellfield Road'
+            addresses.get(0).city == 'Roath'
+            addresses.get(0).zip == 'CF24 3DG'
+            addresses.get(0).phone == 0
+            addresses.get(0).stateProvince == 'Cardiff'
+            addresses.get(0).country == 'GB'
         }
     }
 
     def "I can build a customer"() {
         given: "I have an object mapper to create the entities that don't have builders yet"
-        ObjectMapper mapper = new ObjectMapper()
+        ObjectMapper mapper = ObjectMapperFactory.make()
 
         when: "I use the builder"
         CustomerDataResponse entity = CustomerDataResponse.builder()
@@ -108,7 +113,7 @@ class CustomerDataResponseSpec extends Specification {
         }
     }
 
-    def String generateCustomerDataResponseString() {
+    String generateCustomerDataResponseString() {
         return """{
   "meta": {
     "sender": "http://www.shop.com",

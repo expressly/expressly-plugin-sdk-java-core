@@ -14,6 +14,11 @@ class RouterPingRegisteredSpec extends RouterAbstractRouteSpec {
         router.route(request, response)
 
         then: "I can see that the response is written correctly"
-        responseString.replaceAll('\\s*', '') == '{ "registered": true }'.replaceAll('\\s*', '')
+        Map result = objectMapper.readValue(responseString, Map)
+        result.registered
+        result.version == 'V2'
+        result.lightbox == 'javascript'
+        result.platformName == 'Expressly Java SDK'
+        result.platformVersion == '2.7.0'
     }
 }

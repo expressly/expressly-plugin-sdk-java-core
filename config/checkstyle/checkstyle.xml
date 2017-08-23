@@ -4,11 +4,7 @@
     <module name="SuppressionFilter">
         <property name="file" value="config/checkstyle/checkstyle-suppressions.xml"/>
     </module>
-    
-    <module name="SuppressionCommentFilter">
-        <property name="offCommentFormat" value="Generated code begins here"/>
-        <property name="onCommentFormat" value="Generated code ends here"/>
-    </module>
+
     <module name="TreeWalker">
         <property name="cacheFile" value="target/cachefile"/>
         <property name="tabWidth" value="4"/>

@@ -1,7 +1,7 @@
 package com.buyexpressly.api.resource.server
 
 import com.buyexpressly.api.resource.error.ExpresslyException
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class AddressSpec extends Specification {
@@ -18,12 +18,16 @@ class AddressSpec extends Specification {
             '"stateProvince":"Cardiff",' +
             '"country":"GB"}'
 
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "an address can be mapped from a json string"() {
         given: "I have an address in its json representation"
         String json = expectedAddress
 
         when: "I map it"
-        Address entity = new ObjectMapper().readValue(json, Address)
+        Address entity = ObjectMapperFactory.make().readValue(json, Address)
 
         then: "I can see that the values are populated correctly"
         with(entity) {

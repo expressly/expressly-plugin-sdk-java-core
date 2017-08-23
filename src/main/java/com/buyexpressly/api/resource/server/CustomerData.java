@@ -1,11 +1,6 @@
 package com.buyexpressly.api.resource.server;
 
 import com.buyexpressly.api.util.Builders;
-import com.buyexpressly.api.util.DateTimeIso8601DateSerializer;
-import com.buyexpressly.api.util.LocalDateIso8601DateSerializer;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -13,18 +8,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class CustomerData {
     private String firstName;
     private String lastName;
     private String gender;
     private String company;
-    @JsonSerialize(using = LocalDateIso8601DateSerializer.class)
     private LocalDate dob;
     private String taxNumber;
-    @JsonSerialize(using = DateTimeIso8601DateSerializer.class)
     private DateTime dateUpdated;
-    @JsonSerialize(using = LocalDateIso8601DateSerializer.class)
     private LocalDate dateLastOrder;
     private Integer numberOrdered;
     private Integer billingAddress;

@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MerchantServiceRoute {
-    PING("/expressly/api/ping", "GET", false),
     DISPLAY_POPUP("/expressly/api/(?<campaignCustomerUuid>[A-z0-9\\-]{36})", "GET", false),
     GET_CUSTOMER("/expressly/api/user/(?<email>.+@[^/]+)", "GET", true),
     GET_INVOICES("/expressly/api/batch/invoice", "POST", true),

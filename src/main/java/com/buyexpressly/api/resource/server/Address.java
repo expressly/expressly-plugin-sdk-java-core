@@ -1,10 +1,7 @@
 package com.buyexpressly.api.resource.server;
 
 import com.buyexpressly.api.util.Builders;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
 
-@JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class Address {
     private String firstName;
     private String lastName;

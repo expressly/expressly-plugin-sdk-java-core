@@ -5,7 +5,8 @@ import com.buyexpressly.api.resource.error.ExpresslyException
 import com.buyexpressly.api.resource.server.CartData
 import com.buyexpressly.api.resource.server.CustomerData
 import com.buyexpressly.api.resource.server.MigrationResponse
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 
 class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
 
@@ -31,7 +32,7 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
                 assert requestedCampaignCustomerUuid == expectedCampaignCustomerUuid
                 def received = generateReceivedCustomer(expectedEmail)
 
-                ObjectMapper om = new ObjectMapper();
+                ObjectMapper om = ObjectMapperFactory.make()
                 om.readValue(received, MigrationResponse.class)
 
         }
@@ -60,7 +61,7 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
         1 * provider.loginAndRedirectCustomer(expectedEmail, request, response)
 
         and: "I can see that the response redirects the user correctly"
-        0 * response.sendRedirect(_ as String);
+        0 * response.sendRedirect(_ as String)
     }
 
     def "Existing customer is handled even if error is found only by the shop"() {
@@ -80,7 +81,7 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
                 assert requestedCampaignCustomerUuid == expectedCampaignCustomerUuid
                 def received = generateReceivedCustomer(expectedEmail)
 
-                ObjectMapper om = new ObjectMapper();
+                ObjectMapper om = ObjectMapperFactory.make()
                 om.readValue(received, MigrationResponse.class)
 
         }
@@ -125,7 +126,7 @@ class RouterConfirmMigrationSpec extends RouterAbstractRouteSpec {
         exception.message == "_ different error _"
     }
 
-    def GString generateReceivedCustomer(String expectedEmail) {
+    GString generateReceivedCustomer(String expectedEmail) {
         return """
                 {
                   "migration": {

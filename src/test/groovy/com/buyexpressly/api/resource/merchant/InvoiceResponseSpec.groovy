@@ -1,11 +1,19 @@
 package com.buyexpressly.api.resource.merchant
 
 import com.buyexpressly.api.resource.error.ExpresslyException
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.joda.time.LocalDate
 import spock.lang.Specification
 
 class InvoiceResponseSpec extends Specification {
+    private ObjectMapper om
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+        om = ObjectMapperFactory.make()
+    }
+
     def "a InvoiceResponse object can be built"() {
         when: "I try to build a ping response"
         InvoiceResponse entity = InvoiceResponse.builder()
@@ -47,7 +55,7 @@ class InvoiceResponseSpec extends Specification {
 
     def "I can generate a json string from an invoice response object"() {
         when:
-        def parsed = new ObjectMapper().writeValueAsString(InvoiceResponse.builder()
+        Map result = om.readValue(om.writeValueAsString(InvoiceResponse.builder()
                 .withEmail("a@mail.com")
                 .withPostTaxTotal(new BigDecimal(120))
                 .withPreTaxTotal(new BigDecimal(100))
@@ -55,13 +63,26 @@ class InvoiceResponseSpec extends Specification {
                 .add(generateOrder())
                 .add(generateOrder())
                 .build()
-        )
+        ), Map)
 
         then:
-        parsed == """{"email":"a@mail.com","orderCount":2,"preTaxTotal":100.00,"postTaxTotal":120.00,"tax":20.00,"orders":[{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00},{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00}]}"""
+        result.email == 'a@mail.com'
+        result.orderCount == 2
+        result.preTaxTotal == 100.00G
+        result.postTaxTotal == 120.00G
+        result.tax == 20.00
+        result.orders.size() == 2
+        result.orders.get(0).id == 'SDF-123'
+        result.orders.get(0).date == '2015-12-14'
+        result.orders.get(0).itemCount == 1
+        result.orders.get(0).coupon == 'COUPON_CODE'
+        result.orders.get(0).currency == 'GBP'
+        result.orders.get(0).preTaxTotal == 50.00G
+        result.orders.get(0).postTaxTotal == 60.00G
+        result.orders.get(0).tax == 10.00G
     }
 
-    def InvoiceOrderResponse generateOrder() {
+    InvoiceOrderResponse generateOrder() {
         return InvoiceOrderResponse.builder()
                 .setPreTaxTotal(new BigDecimal(50))
                 .setTax(new BigDecimal(10))

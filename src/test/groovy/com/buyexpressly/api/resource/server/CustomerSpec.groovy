@@ -1,10 +1,14 @@
 package com.buyexpressly.api.resource.server
 
 import com.buyexpressly.api.resource.error.ExpresslyException
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class CustomerSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a Customer object can be parsed from a received json string"() {
         given: "I have a Customer in its properly formatted json representation"
         def expectedEmail = 'someone@test.com'
@@ -16,7 +20,7 @@ class CustomerSpec extends Specification {
                 '}'
 
         when: "I map it"
-        Customer entity = new ObjectMapper().readValue(json, Customer)
+        Customer entity = ObjectMapperFactory.make().readValue(json, Customer)
 
         then: "I can see that the values are populated correctly"
         entity != null
@@ -85,7 +89,7 @@ class CustomerSpec extends Specification {
         expresslyException.message == "field [customerData] is required"
     }
 
-    def String customerDataString() {
+    String customerDataString() {
         return '{' +
                 '"firstName":"Marc",' +
                 '"lastName":"Smith",' +

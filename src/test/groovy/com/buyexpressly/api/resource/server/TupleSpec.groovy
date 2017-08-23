@@ -1,16 +1,20 @@
 package com.buyexpressly.api.resource.server
 
 import com.buyexpressly.api.resource.error.ExpresslyException
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class TupleSpec extends Specification {
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a tuple can be mapped from a json string"() {
         given: "I have a tuple in its json representation"
         String json = '{"field":"twitter","value":"mgsmith57"}'
 
         when: "I map it"
-        Tuple entity = new ObjectMapper().readValue(json, Tuple)
+        Tuple entity = ObjectMapperFactory.make().readValue(json, Tuple)
 
         then: "I can see that the values are populated correctly"
         entity.field == 'twitter'

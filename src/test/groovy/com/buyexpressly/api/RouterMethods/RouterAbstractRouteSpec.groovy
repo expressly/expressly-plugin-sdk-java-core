@@ -4,6 +4,8 @@ import com.buyexpressly.api.ExpresslyProvider
 import com.buyexpressly.api.MerchantServiceProvider
 import com.buyexpressly.api.MerchantServiceRoute
 import com.buyexpressly.api.MerchantServiceRouter
+import com.buyexpressly.api.util.ObjectMapperFactory
+import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
@@ -17,7 +19,8 @@ abstract class RouterAbstractRouteSpec extends Specification {
     protected ExpresslyProvider expresslyProvider
     protected HttpServletRequest request
     protected HttpServletResponse response
-    private StringWriter out = new StringWriter();
+    protected ObjectMapper objectMapper
+    private StringWriter out = new StringWriter()
 
     abstract MerchantServiceRoute getRouteUnderTest()
 
@@ -30,6 +33,8 @@ abstract class RouterAbstractRouteSpec extends Specification {
     }
 
     def setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+        this.objectMapper = ObjectMapperFactory.make()
         this.provider = Mock(MerchantServiceProvider)
         this.expresslyProvider = Mock(ExpresslyProvider)
         this.router = new MerchantServiceRouter(API_KEY, provider, expresslyProvider)

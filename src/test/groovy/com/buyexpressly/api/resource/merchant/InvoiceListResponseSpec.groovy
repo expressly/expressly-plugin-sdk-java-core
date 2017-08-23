@@ -1,10 +1,15 @@
 package com.buyexpressly.api.resource.merchant
 
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import org.joda.time.LocalDate
 import spock.lang.Specification
 
 class InvoiceListResponseSpec extends Specification {
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "a InvoiceListResponse object can be built"() {
         when: "I try to build an invoice list response"
         InvoiceListResponse response = InvoiceListResponse.builder().add(
@@ -33,7 +38,7 @@ class InvoiceListResponseSpec extends Specification {
 
     def "I can generate a json string from an invoice response object"() {
         when:
-        def parsed = new ObjectMapper().writeValueAsString(InvoiceListResponse.builder().add(
+        def parsed = ObjectMapperFactory.make().writeValueAsString(InvoiceListResponse.builder().add(
                 InvoiceResponse.builder()
                         .withEmail("a@email.com")
                         .withPostTaxTotal(new BigDecimal(120))
@@ -48,7 +53,7 @@ class InvoiceListResponseSpec extends Specification {
         parsed == """{"invoices":[{"email":"a@email.com","orderCount":2,"preTaxTotal":100.00,"postTaxTotal":120.00,"tax":20.00,"orders":[{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00},{"id":"SDF-123","date":"2015-12-14","itemCount":1,"coupon":"COUPON_CODE","currency":"GBP","preTaxTotal":50.00,"postTaxTotal":60.00,"tax":10.00}]}]}"""
     }
 
-    def InvoiceOrderResponse generateOrder() {
+    InvoiceOrderResponse generateOrder() {
         return InvoiceOrderResponse.builder()
                 .setPreTaxTotal(new BigDecimal(50))
                 .setTax(new BigDecimal(10))

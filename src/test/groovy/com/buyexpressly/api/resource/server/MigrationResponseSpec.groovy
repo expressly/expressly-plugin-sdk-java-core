@@ -1,16 +1,21 @@
 package com.buyexpressly.api.resource.server
 
-import org.codehaus.jackson.map.ObjectMapper
+import com.buyexpressly.api.util.ObjectMapperFactory
 import spock.lang.Specification
 
 class MigrationResponseSpec extends Specification {
+
+    void setup() {
+        ObjectMapperFactory.failOnUnknownProperties = true
+    }
+
     def "I can map a full migration response object"() {
         given: "I have a properly formatted string that represents a json version of a migration response object"
         def expectedEmail = "test@email.com"
         String expectedMigrationResponse = expectedCustomerResponse(expectedEmail)
 
         when: "I try to map a full migration response object"
-        MigrationResponse mapped = new ObjectMapper().readValue(expectedMigrationResponse, MigrationResponse)
+        MigrationResponse mapped = ObjectMapperFactory.make().readValue(expectedMigrationResponse, MigrationResponse)
 
         then: "I can see i can retrieve the information from the migration response"
         mapped instanceof MigrationResponse
@@ -19,7 +24,7 @@ class MigrationResponseSpec extends Specification {
         mapped.cartData instanceof CartData
     }
 
-    def String expectedCustomerResponse(String expectedEmail) {
+    String expectedCustomerResponse(String expectedEmail) {
         return """
                 {
                   "migration": {

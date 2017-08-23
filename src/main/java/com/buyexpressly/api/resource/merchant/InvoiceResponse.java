@@ -1,15 +1,12 @@
 package com.buyexpressly.api.resource.merchant;
 
 import com.buyexpressly.api.util.Builders;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@JsonAutoDetect(value = JsonMethod.FIELD, fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class InvoiceResponse {
     private final String email;
     private final int orderCount;
