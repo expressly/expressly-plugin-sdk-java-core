@@ -19,6 +19,7 @@ class PingRegisteredResponseSpec extends Specification {
         then: "I can see that the values are populated correctly"
         entity instanceof PingRegisteredResponse
         entity.isRegistered()
+        entity.platformVersion ==~ /\d+\.\d+\.\d+/
     }
 
     def "I can generate a json string from a ping response object"() {

@@ -20,6 +20,10 @@ public final class PingRegisteredResponse {
         return registered;
     }
 
+    public String getPlatformVersion() {
+        return platformVersion;
+    }
+
     public static PingRegisteredResponse build() {
         return SUCCESS;
     }

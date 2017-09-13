@@ -104,22 +104,22 @@ public class MerchantServiceRouter {
             this.expresslyProvider = expresslyProvider;
         }
 
-        CustomerDataResponse getCustomerData(String email) {
+        private CustomerDataResponse getCustomerData(String email) {
             Metadata meta = merchantServiceProvider.buildMerchantMetaData();
             CustomerData data = merchantServiceProvider.getCustomerData(email);
             Customer customer = Customer.build(data, email);
             return CustomerDataResponse.builder().withData(customer).withMeta(meta).build();
         }
 
-        InvoiceListResponse getInvoices(InvoiceListRequest request) {
+        private InvoiceListResponse getInvoices(InvoiceListRequest request) {
             return InvoiceListResponse.builder().addAll(merchantServiceProvider.getInvoices(request)).build();
         }
 
-        EmailStatusListResponse checkEmailAddresses(EmailAddressRequest request) {
+        private EmailStatusListResponse checkEmailAddresses(EmailAddressRequest request) {
             return merchantServiceProvider.checkCustomerStatus(request);
         }
 
-        MigrationResponse acceptMigration(String campaignCustomerUuid) throws IOException {
+        private MigrationResponse acceptMigration(String campaignCustomerUuid) throws IOException {
             MigrationResponse response = expresslyProvider.fetchMigrationCustomerData(campaignCustomerUuid);
             String email = response.getMigrationData().getData().getEmail();
             Builders.requiresNonNull(email, "Customer Email missing, not enough information to migrate customer");
@@ -127,7 +127,7 @@ public class MerchantServiceRouter {
             return response;
         }
 
-        String registerCustomer(MigrationResponse data) {
+        private String registerCustomer(MigrationResponse data) {
             String email = data.getMigrationData().getData().getEmail();
             String merchantUserReference = merchantServiceProvider.registerCustomer(email, data.getMigrationData().getData().getCustomerData());
             Builders.validate(!Builders.isNullOrEmpty(merchantUserReference), String.format("Failed to register customer %s with merchant", email));
@@ -135,7 +135,7 @@ public class MerchantServiceRouter {
             return merchantUserReference;
         }
 
-        void confirmMigration(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        private void confirmMigration(HttpServletRequest request, HttpServletResponse response) throws IOException {
             String campaignCustomerUuid = MerchantServiceRoute.CONFIRM_MIGRATION.getUriParameters(request.getRequestURI()).get("campaignCustomerUuid");
             try {
                 MigrationResponse data = acceptMigration(campaignCustomerUuid);
@@ -156,24 +156,24 @@ public class MerchantServiceRouter {
             }
         }
 
-        boolean checkCustomerAlreadyExists(MigrationResponse data) {
+        private boolean checkCustomerAlreadyExists(MigrationResponse data) {
             String email = data.getMigrationData().getData().getEmail();
             return merchantServiceProvider.checkCustomerAlreadyExists(email);
         }
 
-        void populateCart(String email, CartData cartData) {
+        private void populateCart(String email, CartData cartData) {
             Builders.validate(merchantServiceProvider.createCustomerCart(email, cartData), "Failed to add cart to customer id: %s");
         }
 
-        void confirmCustomer(String campaignCustomerUuid) throws IOException {
+        private void confirmCustomer(String campaignCustomerUuid) throws IOException {
             Builders.validate(expresslyProvider.finaliseMigrationOfCustomerData(campaignCustomerUuid), String.format("Couldn't confirm the migration of %s with xly server", campaignCustomerUuid));
         }
 
-        void loginAndRedirectCustomer(String merchantUserReference, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        private void loginAndRedirectCustomer(String merchantUserReference, HttpServletRequest request, HttpServletResponse response) throws IOException {
             merchantServiceProvider.loginAndRedirectCustomer(merchantUserReference, request, response);
         }
 
-        void handleCustomerAlreadyExists(String email, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        private void handleCustomerAlreadyExists(String email, HttpServletRequest request, HttpServletResponse response) throws IOException {
             merchantServiceProvider.handleCustomerAlreadyExists(email, request, response);
         }
     }
